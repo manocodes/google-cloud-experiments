@@ -8,6 +8,7 @@ google-cloud-secret-manager==2.18.0
 google-cloud-monitoring==2.18.0
 google-cloud-bigquery==3.14.0
 google-cloud-logging==3.9.0
+google-cloud-resource-manager==1.12.0
 
 # Authentication & Core
 google-auth==2.25.2

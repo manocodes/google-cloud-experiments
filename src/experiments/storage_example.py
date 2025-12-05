@@ -2,10 +2,14 @@
 
 import os
 from google.cloud import storage
-from dotenv import load_dotenv
+import sys
+
+# Add parent directory to path to import config
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from config import load_environment, print_config
 
 # Load environment variables
-load_dotenv()
+load_environment()
 
 
 def list_buckets():

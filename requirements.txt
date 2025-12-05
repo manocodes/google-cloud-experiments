@@ -1,0 +1,19 @@
+# Core Google Cloud Libraries
+google-cloud-storage==2.14.0
+google-cloud-firestore==2.14.0
+google-cloud-pubsub==2.19.0
+google-cloud-run==0.10.0
+google-cloud-aiplatform==1.38.1
+google-cloud-secret-manager==2.18.0
+google-cloud-monitoring==2.18.0
+google-cloud-bigquery==3.14.0
+google-cloud-logging==3.9.0
+
+# Authentication & Core
+google-auth==2.25.2
+google-auth-oauthlib==1.2.0
+google-auth-httplib2==0.2.0
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0

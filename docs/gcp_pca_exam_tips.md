@@ -90,3 +90,30 @@ These are almost **always wrong** answers in the exam:
     *   "Standard SQL" + "Analytics" = **BigQuery**.
     *   "Lift and Shift" + "No Code Changes" = **Migrate for Compute Engine**.
     *   "Cost Optimization" + "Batch" = **Preemptible/Spot VMs**.
+
+## 7. Resource Hierarchy & Organization Policies
+This is a **High Priority** topic. You must understand how governance flows down.
+
+### The Hierarchy
+1.  **Organization** (Root Node): The company. Top-level billing and policy powerhouse.
+    *   *Requirement:* Needs Google Workspace or Cloud Identity.
+2.  **Folders** (Departments/Teams): Logical grouping for isolation (e.g., "HR", "Engineering" or "Prod", "Test").
+3.  **Projects** (Trust Boundary): The atomic unit of billing and permissions.
+    *   *Rule:* Resources (VMs, Buckets) live inside Projects. They DO NOT live in folders directly.
+4.  **Resources**: The actual services (VMs, Buckets, Tables).
+
+### Organization Policies (The "Guardrails")
+Unlike IAM (which says *WHO* can do something), Org Policies check *WHAT* is being done.
+*   **Inheritance**: Policies set at the Org level apply to ALL folders and projects unless overridden.
+*   **Common Exam Scenarios**:
+    *   *Scenario:* "Ensure no developers can create public load balancers."
+        *   *Answer:* Set an **Organization Policy** constraint (`compute.restrictLoadBalancerCreationForTypes`) on the specific Folder for developers.
+    *   *Scenario:* "Restrict resources to only the 'us-central1' region for compliance."
+        *   *Answer:* Set the `gcp.resourceLocations` Org Policy constraint.
+    *   *Distractor Alert:* Do NOT use IAM for these constraints. IAM controls access, not configuration.
+
+### Best Practices for the Exam
+*   **Environment Isolation**: Use **Separate Projects** for Dev, Test, and Prod. Do NOT put them in the same project just to save time.
+*   **Billing**: Billing Accounts are linked to Projects. A single Billing Account can pay for multiple Projects (centralized billing).
+*   **Least Privilege**: Apply broad permissions (e.g., "Viewer") at the Folder level, and specific permissions (e.g., "Storage Admin") at the Project level.
+

@@ -52,5 +52,24 @@ This structure allows you to:
 5.  **Check:** Does that user appear in the list?
     *   *Result:* They should appear with the role `Inherited from folder Development`.
 
+### Step E: Setting an Organization Policy (Guardrails)
+Policies are different from IAM. IAM says *WHO*, Policies say *WHAT*.
+*Goal:* We want to block Public IP creation in the `Staging` environment to save money and improve security.
+
+1.  **Navigate:** Go to **IAM & Admin** > **Organization Policies**.
+2.  **Select Scope:** Click the top Project Selector and choose the **Staging** folder (`manoyaka.com > Engineering > Staging`).
+3.  **Search Policy:** Filter for "external IPs".
+4.  **Click:** `Define allowed external IPs for VM instances` (compute.vmExternalIpAccess).
+5.  **Edit:**
+    *   Click **Manage Policy** (or Edit).
+    *   Select **Override parent's policy**.
+    *   **Rule:** Select **Deny All**.
+    *   Click **Set Policy**.
+
+**Verification:**
+*   If you now try to create a VM in `manoyaka-eng-stage` and give it a Public IP, it will fail with an error.
+*   *Exam Note:* This is how you enforce compliance (e.g., HIPAA/PCI) without micromanaging every developer.
+
 ## 3. Clean Up (Optional)
 To stop billing, simply **Shut down** the projects from the Manage Resources page. Folders are free.
+

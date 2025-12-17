@@ -112,8 +112,32 @@ Unlike IAM (which says *WHO* can do something), Org Policies check *WHAT* is bei
         *   *Answer:* Set the `gcp.resourceLocations` Org Policy constraint.
     *   *Distractor Alert:* Do NOT use IAM for these constraints. IAM controls access, not configuration.
 
+
 ### Best Practices for the Exam
 *   **Environment Isolation**: Use **Separate Projects** for Dev, Test, and Prod. Do NOT put them in the same project just to save time.
 *   **Billing**: Billing Accounts are linked to Projects. A single Billing Account can pay for multiple Projects (centralized billing).
 *   **Least Privilege**: Apply broad permissions (e.g., "Viewer") at the Folder level, and specific permissions (e.g., "Storage Admin") at the Project level.
+
+## 8. Identity & Authentication Strategy (ADC & Workload Identity)
+The exam tests if you know the **secure** way to connect diverse systems.
+
+### The "No Keys" Rule
+*   **Anti-Pattern (Wrong)**: "Download a Service Account JSON key" or "Store keys in code/config/metadata."
+    *   *Why:* Keys are long-lived secrets that get leaked.
+*   **The "Correct" Pattern (Google Internal)**: Use **Attached Service Accounts**.
+    *   *Action:* Attach the Service Account to the VM/function. Use simple client code (`storage.Client()`) which relies on **ADC**.
+*   **The "Correct" Pattern (External/Multi-Cloud)**: Use **Workload Identity Federation**.
+    *   *Scenario:* AWS EC2, Azure VM, or GitHub Actions needs to access BigQuery.
+    *   *Action:* Configure a Workload Identity Pool. Exchange the AWS/Azure token for a short-lived Google token. **No JSON keys involved.**
+
+### Debugging Access Issues
+*   **"Works on my machine, fails in prod"**: This is almost always an **ADC Identity Mismatch**.
+    *   *Local:* Uses YOUR user credentials (`gcloud auth application-default login`).
+    *   *Prod:* Uses the Service Account attached to the resource.
+    *   *Fix:* Check the IAM roles granted to the **Service Account**, not your user.
+
+### IAM Management
+*   **Users vs. Groups**: ALWAYS grant roles to **Google Groups**, never individual users.
+    *   *Reason:* It allows you to add/remove team members without updating IAM policies on every project.
+
 

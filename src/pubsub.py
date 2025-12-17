@@ -22,6 +22,7 @@ display_Project()
 
 def list_all_topics():
     display_Project()
+
     """List all PubSub topics"""
     try:
         

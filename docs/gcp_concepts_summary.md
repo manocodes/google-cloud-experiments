@@ -108,3 +108,16 @@ You do not need to change your code. You only change the **environment**.
 2.  **Set Env Variable**: `export BIGTABLE_EMULATOR_HOST=localhost:8086`.
 3.  **Run Code**: The Google Client Libraries detect the variable and redirect traffic to localhost.
 4.  **Deploy to Prod**: Simply **unset** the variable. The code defaults back to real Google Cloud.
+
+## 10. Cloud Shell Editor & Cloud Code
+*   **Cloud Shell Editor**: A browser-based VS Code environment running on a temporary VM.
+    *   **Persistent**: Your Home directory (`~/`) is saved (5GB limit). Settings and git repos here survive.
+    *   **Ephemeral**: System installs (`apt-get`) and root directories reset after the session closes.
+    *   **Use Case**: specific scenarios like "borrowed laptop", avoiding local "environment hell", or reviewing massive git repos without downloading.
+*   **Google Cloud Code**: An extension for VS Code (Local or Cloud).
+    *   **Purpose**: A "Super Extension" that adds GUI tools for GCP services.
+    *   **Key Features**:
+        *   **Cluster Explorer**: Browse GKE/Cloud Run resources.
+        *   **YAML Intelligence**: Autocomplete for Kubernetes/Cloud Build files.
+        *   **One-Click Deploy**: Wizards to deploy apps without memorizing CLI flags.
+    *   **Troubleshooting**: If the sidebar is empty, check the **Status Bar** (bottom blue bar) to ensure the correct **GCP Project** is selected.

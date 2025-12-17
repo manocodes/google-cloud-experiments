@@ -55,3 +55,56 @@ Distinguishing system tools from project dependencies.
 
 *   Use **Brew** to set up your environment (get the `gcloud` command).
 *   Use **Pip** to set up your project (get `import google.cloud` capability).
+
+## 6. Terraform & APIs
+Terraform interacts with Google Cloud almost exclusively via the **REST API**.
+
+*   **Mechanism**: Terraform acts as a wrapper that translates HCL code (e.g., `resource "google_storage_bucket"`) into HTTP REST calls (POST, GET, PUT, DELETE).
+*   **Provider**: The `google` provider handles the translation and authentication.
+*   **Why REST?**: Terraform's CRUD (Create, Read, Update, Delete) model maps perfectly to RESTful HTTP verbs.
+
+## 7. gRPC vs. REST
+Understanding the protocols underlying GCP services.
+
+| Feature | REST (Traditional) | gRPC (Modern) |
+| :--- | :--- | :--- |
+| **Format** | **JSON** (Text-based, human-readable). | **Protobuf** (Binary, machine-readable). |
+| **Efficiency** | Heavy. Requires parsing text. | Lightweight. 5-10x smaller payload. |
+| **Transport** | HTTP/1.1 (One request at a time). | HTTP/2 (Multiplexed streaming). |
+| **Use Case** | Management, Control Plane, Terraform. | High-volume data (Pub/Sub, Bigtable), internal Google communication. |
+
+## 8. Google Cloud Marketplace
+A digital storefront to find, deploy, and manage third-party software and Google-built solutions on GCP.
+
+### Key Benefits (Why use it?)
+1.  **Speed**: Deploys complex stacks (like LAMP or Deep Learning environments) in minutes with pre-configured settings.
+2.  **Consolidated Billing**: Third-party costs (e.g., MongoDB, Gitlab) appear on your single Google Cloud invoice.
+3.  **Simplicity**: Avoids "Driver Hell" or dependency conflicts. Images come with compatible Drivers/OS/Libraries pre-installed.
+4.  **Trust**: Images are security-scanned and vetted by Google.
+
+### Types of Solutions
+*   **Virtual Machine (IaaS) Solutions**:
+    *   **What you get**: A raw VM with software pre-installed (e.g., "WordPress by Bitnami", "Deep Learning VM").
+    *   **Your Responsibility**: You have full root access but must maintain the OS (updates, patches).
+*   **SaaS / Managed Services**:
+    *   **What you get**: Access to a fully managed platform (e.g., "MongoDB Atlas", "Redis Enterprise").
+    *   **Your Responsibility**: You just use the data/app. The vendor manages reliability, backups, and OS pathcing.
+
+### Marketplace vs. Workspace
+*   **Google Cloud Marketplace**: For **Developers/Ops** building apps (databases, dev tools, security appliances).
+*   **Google Workspace Marketplace**: For **End Users** enhancing productivity (DocuSign for Gmail, Trello for Sheets).
+
+## 9. Cloud Emulators
+Emulators allow you to run "fake" versions of Google Cloud services locally (Bigtable, Pub/Sub, Firestore) without internet or cost.
+
+### Why use them?
+1.  **Cost**: Avoids the high minimum cost of services like **Bigtable** (~$0.65/hour) during testing.
+2.  **Speed**: Instant startup (milliseconds) vs. Cloud provisioning (minutes).
+3.  **Safety**: Experiment with destructive actions (deleting tables) without risking production data.
+
+### How it works
+You do not need to change your code. You only change the **environment**.
+1.  **Start Emulator**: `gcloud beta emulators bigtable start` (Runs on localhost).
+2.  **Set Env Variable**: `export BIGTABLE_EMULATOR_HOST=localhost:8086`.
+3.  **Run Code**: The Google Client Libraries detect the variable and redirect traffic to localhost.
+4.  **Deploy to Prod**: Simply **unset** the variable. The code defaults back to real Google Cloud.

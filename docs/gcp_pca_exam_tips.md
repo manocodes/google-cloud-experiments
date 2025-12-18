@@ -141,3 +141,6 @@ The exam tests if you know the **secure** way to connect diverse systems.
     *   *Reason:* It allows you to add/remove team members without updating IAM policies on every project.
 
 
+
+## 9. Detailed Study Guides
+*   **Compute Engine**: [gcp_compute_engine_study_plan.md](./gcp_compute_engine_study_plan.md) - Comprehensive deep dive into GCE, including machine types, MIGs, and storage options.

@@ -144,3 +144,4 @@ The exam tests if you know the **secure** way to connect diverse systems.
 
 ## 9. Detailed Study Guides
 *   **Compute Engine**: [gcp_compute_engine_study_plan.md](./gcp_compute_engine_study_plan.md) - Comprehensive deep dive into GCE, including machine types, MIGs, and storage options.
+*   **App Engine**: [gcp_app_engine_study_guide.md](./gcp_app_engine_study_guide.md) - Deep dive into GAE Standard vs. Flexible and exam strategy.

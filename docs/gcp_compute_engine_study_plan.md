@@ -21,11 +21,18 @@ Master the nuances of Google Compute Engine (GCE) specifically for the Professio
 | **Tau** | **T2D** | Scale-out Web/Microservices | **Best Price-Performance (x86)**. |
 | **Tau** | **T2A** | Arm-compatible apps | **Cost efficiency on Arm architecture**. |
 | **Memory** | M2 | SAP HANA, Redis | Maximize RAM per vCPU. |
-*   **Preemptible / Spot VMs:**
-    *   *Exam Gold*: Short-lived, batch processing, fault-tolerant workloads.
-    *   *Terms*: Spot VMs are the modern replacement for Preemptible, but the exam may use both terms.
-    *   *Max duration*: 24h (Preemptible) vs No limit but can be killed anytime (Spot).
-    *   *Cost savings*: 60-91%.
+*   **Preemptible / Spot VMs (The "Budget" Choice):**
+    *   *Exam Gold*: Use for short-lived, batch processing, and fault-tolerant workloads.
+    *   **Logic**: High discount (~60-91%) because Google can "take them back" at any time.
+
+| Feature | **Preemptible** (Old) | **Spot** (New) |
+| :--- | :--- | :--- |
+| **Max Duration** | **24 Hours** (Hard limit) | **No Limit** (Infinite) |
+| **Pricing** | Fixed (High discount) | Dynamic (Deeper discounts) |
+| **SUDs** | Not eligible for SUDs | Not eligible for SUDs |
+| **Warning** | 30s termination notice | 30s termination notice |
+
+    *   *Key Difference*: Spot is the successor to Preemptible. Spot VMs can run longer than 24h as long as resource capacity is available.
 *   **Sole-Tenant Nodes:**
     *   Dedicated physical hardware for your use only.
     *   **Workflow**: Requires creating a **Node Template** -> **Node Group** -> **VM Placement**.

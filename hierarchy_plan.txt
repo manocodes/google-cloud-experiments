@@ -1,0 +1,6 @@
+Resource Hierarchy Plan:
+Organization: manoyaka.com (Already exists)
+├── Folder: Production
+│   └── Project: manoyaka-prod-app
+└── Folder: Development
+    └── Project: manoyaka-dev-app

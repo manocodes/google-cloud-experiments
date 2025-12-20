@@ -76,7 +76,37 @@ Choosing the right mode is a common exam scenario.
 
 ---
 
-## 3. GKE Networking (Critical)
+## 3. GKE Architecture Details
+
+### The Control Plane (Google Managed)
+The "Brain" of the cluster. In GKE, Google manages this entirely.
+- **API Server**: Entry point for all commands (`kubectl`).
+- **etcd**: Source of Truth - distributed key-value store for cluster state.
+- **Scheduler**: Decides which **Node** a newly created **Pod** should live on.
+- **Controller Manager**: Regulates the state (Self-healing).
+
+### The Data Plane (The Worker Nodes)
+The actual VMs where your code runs.
+- **Kubelet**: Agent on each node ensuring containers are running in Pods.
+- **Kube-proxy**: Manages network rules (Pod-to-Pod communication).
+- **Container Runtime**: GKE uses **`containerd`** (formerly Docker).
+
+---
+
+## 4. Workload Resources (The Managers)
+
+| Resource | Purpose | PCA Use Case |
+| :--- | :--- | :--- |
+| **Deployment** | Stateless replication & updates. | Web APIs, Microservices. |
+| *Note* | *Manages ReplicaSets under the hood. Use this for Rolling Updates.* | |
+| **StatefulSet** | Stable identities & persistent storage. | Databases, Kafka. |
+| **DaemonSet** | One pod on every node. | Logging agents, Monitoring. |
+| **Job** | Run-to-completion tasks. | Batch processing, Migrations. |
+| **CronJob** | Scheduled tasks. | Backups, Reports. |
+
+---
+
+## 5. GKE Networking (Critical)
 
 ### VPC-Native Clusters (Alias IP)
 - **Standard now**: Uses Alias IP ranges for Pods and Services.
@@ -96,7 +126,7 @@ Choosing the right mode is a common exam scenario.
 
 ---
 
-## 4. Security Framework
+## 6. Security Framework
 
 ### Workload Identity (Top Exam Topic)
 - **Problem**: Mounting Service Account keys as secrets is insecure.
@@ -112,7 +142,7 @@ Choosing the right mode is a common exam scenario.
 
 ---
 
-## 5. Storage Options
+## 7. Storage Options
 
 - **Persistent Disk (PD)**: Standard block storage. Use **Regional PD** for high availability across zones.
 - **Filestore**: Managed NFS for applications requiring shared read/write access (RWX).
@@ -120,7 +150,7 @@ Choosing the right mode is a common exam scenario.
 
 ---
 
-## 6. Optimization & Best Practices
+## 8. Optimization & Best Practices
 
 - **Preemptible / Spot VMs**: Use for fault-tolerant batch jobs to save up to 80% cost.
 - **Horizontal Pod Autoscaler (HPA)**: Scales pods based on CPU/Mem.
@@ -130,7 +160,7 @@ Choosing the right mode is a common exam scenario.
 
 ---
 
-## 7. PCA Decision Matrix
+## 9. PCA Decision Matrix
 
 | Requirement | Recommendation |
 | :--- | :--- |

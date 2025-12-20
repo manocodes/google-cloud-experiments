@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2 # 2 replicas for the backend
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend-app
+        image: us-central1-docker.pkg.dev/manoyaka-eng-dev/gke-lab/backend:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 80       # Port other pods will use (http://backend-service:80)
+      targetPort: 8080 # Port inside the container
+  type: ClusterIP    # Internal only! Secure.

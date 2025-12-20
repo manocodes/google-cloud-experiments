@@ -170,3 +170,24 @@ By default, services have separate subdomains. Use `dispatch.yaml` to route base
 ---
 
 ## 13. Tips & Distractors
+
+### ✅ Tips
+*   **Zero to Hero**: GAE Standard is the *only* compute option that scales to zero for non-containerized code.
+*   **App Engine Regionality**: An App Engine application is **regional**. Once you pick a region for your project, you **cannot change it**.
+*   **IAP**: If the question asks how to secure an internal App Engine app without a VPN, the answer is **Identity-Aware Proxy (IAP)**.
+*   **Memcache**: GAE has a built-in Memcache (Standard only), but for modern designs, use **Cloud Memorystore (Redis)**.
+
+### ❌ Distractors (Common Wrong Answers)
+*   **"Install App Engine on-premises"**: Wrong. GAE is a proprietary Google service. Use **GKE (Anthos)** for hybrid/on-prem serverless.
+*   **"Use GAE Standard for long-running batch jobs"**: Wrong. GAE Standard has request timeouts (usually 60 seconds - 10 minutes). Use Compute Engine or Dataflow for long jobs.
+*   **"SSH into GAE Standard"**: Impossible. You cannot SSH into Standard instances. You can only debug via logs.
+*   **"Update the OS on GAE"**: Wrong. Google manages the OS. If you need OS control, use GCE.
+
+---
+
+## 14. Cost Optimization & Cleanup
+Architects must manage "Zombie" resources to prevent waste.
+*   **Scale to Zero**: GAE Standard does this by default (0 traffic = 0 compute cost).
+*   **Disabling an App**: The only way to stop a GAE app without deleting the project. Use `gcloud app update --noserving-status`.
+*   **Cleaning Deployment Artifacts**: `gcloud app deploy` leaves code in **Cloud Storage** buckets and images in **Artifact Registry**. These must be manually cleaned to avoid storage costs.
+*   **Deleting Versions**: Keep only the necessary versions; delete old ones to save on storage and metadata overhead.

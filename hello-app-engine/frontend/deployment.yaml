@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 3  # Start with 3 copies for high availability
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend-app
+        # Use the image we just built and pushed!
+        image: us-central1-docker.pkg.dev/manoyaka-eng-dev/gke-lab/frontend:v2
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+        env:
+        - name: BACKEND_URL
+          value: "http://backend-service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: frontend  # This MUST match the labels in the Deployment above
+  ports:
+    - protocol: TCP
+      port: 80       # External port (people visit http://[IP])
+      targetPort: 8080 # Internal port (where Gunicorn is listening)

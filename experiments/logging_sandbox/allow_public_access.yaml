@@ -1,0 +1,4 @@
+name: projects/manoyaka-eng-dev/policies/iam.publicAccessPrevention
+spec:
+  rules:
+  - enforce: false

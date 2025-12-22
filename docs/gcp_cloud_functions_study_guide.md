@@ -70,7 +70,17 @@ Compare with other compute options:
 
 ---
 
-## 7. Common Exam Scenarios
+## 8. Knative & Portability (The "Trigger" Word)
+Knative is the open-source foundation for Cloud Run (and thus GCF 2nd Gen).
+
+### Why it matters for PCA:
+- **Anthos/Hybrid**: If you need "Cloud Run" on-premises, you are running Knative on GKE Enterprise (Anthos).
+- **Portability**: Because GCF 2nd Gen and Cloud Run follow the Knative spec, you can move your workloads to any Kubernetes cluster running Knative with minimal changes.
+- **Scale-to-Zero**: Knative is what allows Kubernetes-based workloads to scale to zero when idle.
+
+---
+
+## 9. Common Exam Scenarios
 1. **Scenario**: You need to resize images uploaded to GCS.
    - **Answer**: Use a Cloud Function triggered by `google.storage.object.finalize`.
 2. **Scenario**: You want to process millions of messages from a queue with minimal latency.

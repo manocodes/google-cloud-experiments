@@ -4,6 +4,17 @@ Google Kubernetes Engine (GKE) is a managed, production-ready environment for ru
 
 ---
 
+## 0. Kubernetes vs. GKE: The Distinction
+| Layer | **Kubernetes (Internal Core)** | **GKE (GCP Integration)** |
+| :--- | :--- | :--- |
+| **Logic** | API Server, Scheduler, Controller Manager. | Managed Control Plane, Auto-Upgrades. |
+| **Network** | Pod-to-Pod communication (Kube-proxy). | **VPC-Native (Alias IP)**, Global Load Balancers. |
+| **Storage** | Persistent Volumes (CSI). | **Google Persistent Disks**, Filestore. |
+| **Security** | RBAC, Network Policies. | **Workload Identity**, IAM Integration, Binary Authorization. |
+| **Operations** | `kubectl apply` lifecycle. | **Autopilot Scale**, Cluster Autoscaler, Cloud Monitoring. |
+
+---
+
 ## 0. GKE and Compute Engine: The Relationship
 
 One of the most important concepts for the PCA exam is understanding that **GKE is built on top of Compute Engine**.
@@ -58,6 +69,9 @@ Choosing the right mode is a common exam scenario.
 | **Control** | Opinionated, secure by default. | Full control over node configuration. |
 | **Use Case** | Most production workloads; "hands-off". | Specialized hardware (GPUs), specific kernels. |
 
+> **UI Tip**: If you don't see "GKE Standard" when creating a cluster, look for the **"SWITCH TO STANDARD CLUSTER"** button in the top-right corner of the Autopilot configuration page.
+
+
 ---
 
 ## 2. Cluster Topology & Availability
@@ -93,7 +107,20 @@ The actual VMs where your code runs.
 
 ---
 
+### 3.1 Node Pools (Standard Mode)
+In Standard mode, you manage nodes via **Node Pools**. A node pool is a subset of nodes within a cluster that all have the same configuration.
+
+**Key Benefits for PCA Scenarios:**
+*   **Heterogeneous Hardware**: Mix machine types (e.g., one pool for high-CPU, one for GPU).
+*   **Cost Optimization**: Use **Spot/Preemptible VMs** for one pool (batch jobs) and **On-Demand** for another (web servers).
+*   **Isolation**: Use **Taints and Tolerations** to ensure specific pods (like monitoring tools) run on their own dedicated nodes.
+*   **Independent Scaling**: The Cluster Autoscaler can scale each pool independently (e.g., scaling the GPU pool to 0 when not in use).
+*   **Upgrade management**: Create a new pool with a newer K8s version, migrate workloads, then delete the old pool.
+
+---
+
 ## 4. Workload Resources (The Managers)
+
 
 | Resource | Purpose | PCA Use Case |
 | :--- | :--- | :--- |
@@ -173,7 +200,47 @@ The actual VMs where your code runs.
 
 ---
 
-## Hands-On Exercise Ideas
-1.  **Deploy a "Hello World" Container**: Use `kubectl` to create a deployment and expose it via a LoadBalancer.
-2.  **Configure Workload Identity**: Bind a KSA to a GSA and verify access to Cloud Storage.
-3.  **Horizontal Autoscaling**: Use a load generator to trigger HPA and Cluster Autoscaler.
+## 10. Study Resources & Tools
+
+*   **Google Cloud Skills Boost (Official)**: The primary source for hands-on labs (formerly Qwiklabs).
+*   **Killercoda**: Great for CKA/CKAD style interactive Kubernetes practice.
+*   **Cloud Shell**: Your best friend for testing `gcloud` and `kubectl` commands for free.
+*   ⚠️ **Katacoda Warning**: Katacoda was discontinued in 2022. If you see it mentioned in older study guides, ignore it and use Skills Boost or Killercoda instead.
+
+---
+
+## 11. Tricky Scenarios & PCA Exam Tips
+
+These are high-probability scenarios often encountered on the PCA exam.
+
+### 💡 High-Availability (HA) Traps
+*   **The Scenario:** "Ensure the Kubernetes API remains available even during a total zone failure."
+*   **The Correct Choice:** **Regional Cluster**. In a Zonal cluster, the Control Plane lives in only one zone. If that zone dies, you can't run `kubectl` or manage the cluster until it's back.
+*   **The "Zero Downtime" Choice:** Use **Regional Clusters** and **Multiple Node Pools** to ensure updates don't kill all instances of a pod at once.
+
+### 💡 The "Secret" to Google Cloud Access
+*   **The Scenario:** "A pod needs to upload files to a Cloud Storage bucket with the least possible management of credentials."
+*   **The Correct Choice:** **Workload Identity**. 
+*   **Why?** Service Account JSON keys are "long-lived" and a major security risk. Workload Identity uses short-lived tokens and maps K8s Service Accounts (KSA) to GCP Service Accounts (GSA).
+
+### 💡 Troubleshooting Pod Failures
+*   **Scenario: Pod is `Pending` forever.**
+    *   **Cause:** Insufficient resources (CPU/RAM) in the cluster.
+    *   **Fix:** Check **Cluster Autoscaler** settings or increase Node size.
+*   **Scenario: `ImagePullBackOff`**
+    *   **Cause:** Typo in the image name OR the GKE service account doesn't have permissions to the **Artifact Registry**.
+*   **Scenario: `CrashLoopBackOff`**
+    *   **Cause:** The application inside the container is crashing (check logs with `kubectl logs [POD_NAME]`). Common reasons: missing environment variables or database connection errors.
+
+### 💡 Storage Nuances (RWO vs RWX)
+*   **Requirement:** "Multiple pods on different nodes must write to the same shared directory."
+*   **Incorrect:** Persistent Disk (standard PD). It is **ReadWriteOnce (RWO)**—only one node can mount it.
+*   **Correct:** **Filestore (NFS)** or **Google Cloud Storage (via FUSE)**. These support **ReadWriteMany (RWX)**.
+
+### 💡 Private Cluster Connectivity
+*   **Problem:** "My nodes in a Private Cluster cannot download updates from the internet."
+*   **Solution:** **Cloud NAT**. Nodes in a private cluster have no external IPs, so they need a NAT gateway to initiate outbound connections for updates/patches.
+
+### 💡 Modern Image Registry
+*   **The Transition:** Google is moving from **Container Registry (GCR)** to **Artifact Registry (AR)**.
+*   **Exam Tip:** If both are options, **Artifact Registry** is the more modern, regional, and recommended choice for architectural designs.

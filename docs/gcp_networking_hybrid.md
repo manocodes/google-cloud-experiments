@@ -57,6 +57,14 @@ Private traffic over a **dedicated physical line** (Traffic does NOT touch the p
 *   **Service Projects**: Attach to the Host Project and *consume* its subnets.
 *   **Benefit**: Security admins verify rules once in the Host; Developers just deploy VMs in Service projects. Separation of Duties.
 
+### C. Comparison: Ways to Connect VPCs
+| Method | Key Characteristic | Use Case | Transitive? |
+| :--- | :--- | :--- | :--- |
+| **VPC Peering** | Decentralized, direct connection. | Simple connection between two specific projects. | **NO** (A->B->C doesn't work) |
+| **Shared VPC** | Centralized (Host/Service). | Org-wide governance. One team controls the network. | **YES** (Internal to the Host) |
+| **Cloud VPN** | Encrypted Tunnel. | Connecting VPCs across *different* Organizations or Clouds. | **YES** (via BGP) |
+| **Private Service Connect** | Service-oriented (Endpoint). | Publishing a service (API) to another VPC without exposing the whole network. | **N/A** (One-way) |
+
 ---
 
 ## PCA Decision Matrix: Hybrid Connectivity

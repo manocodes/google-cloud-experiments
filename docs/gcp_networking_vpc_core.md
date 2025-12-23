@@ -8,8 +8,17 @@ For the Professional Cloud Architect (PCA) exam, you must understand the "Global
 
 ### Global Software-Defined Network
 *   **Global Resource**: A VPC in Google Cloud allows you to have subnets in **multiple regions** effectively communicating over private IP addresses without needing VPNs to connect regions.
-*   **Regional Subnets**: While the VPC is global, **Subnets are Regional**.
+    *   **Crucial Concept**: The VPC *itself* has **NO IP Adress Range**. It is just a container. Only the **Subnets** inside it have IP ranges.
+*   **Regional Subnets**: A subnet belongs to **exactly one region**. It cannot span across regions.
+    *   *Clarification*: You CAN have **multiple subnets** in the same region (e.g., `subnet-a` and `subnet-b` both in `us-central1`).
     *   *Example*: A connection from a VM in `us-central1` to a VM in `asia-northeast1` (in the same VPC) travels over Google's backbone, not the public internet.
+
+    *   *Example*: A connection from a VM in `us-central1` to a VM in `asia-northeast1` (in the same VPC) travels over Google's backbone, not the public internet.
+
+### Project Relationship (1 Project : N VPCs)
+*   **Ownership**: A VPC "lives" inside a Google Cloud Project. It is a resource just like a VM.
+*   **Quotas**: By default, you can have **5 VPCs** per project (this is a soft limit, you can request more).
+*   **Isolation**: By default, a VPC in `Project A` cannot talk to a VPC in `Project B` (unless you use Peering or Shared VPC).
 
 ### Types of VPC Mode
 1.  **Auto Mode**:
@@ -19,6 +28,39 @@ For the Professional Cloud Architect (PCA) exam, you must understand the "Global
 2.  **Custom Mode**:
     *   Starts empty. You explicitely create subnets only in regions you need.
     *   **PCA Recommendation**: Always choose **Custom Mode** for production designs.
+
+---
+
+## 1.1 Basics: CIDR Blocks & Addressing
+
+**CIDR (Classless Inter-Domain Routing)** is how you define the "size" of your network.
+*   **Format**: `IP_Address/Mask` (e.g., `10.0.0.0/24`).
+*   **The Mask**: The number after the slash tells you how many IPs are available. **Lower number = More IPs**.
+
+### CIDR "Cheat Sheet" for PCA
+| CIDR Mask | Total IPs | Usable IPs (GCP reserves 4) | Use Case |
+| :--- | :--- | :--- | :--- |
+| **`/32`** | 1 | 0 (Host only) | Single IP (e.g., `/32` route to a specific VM). |
+| **`/29`** | 8 | 4 | Smallest allowed GCP subnet. Good for interconnect. |
+| **`/24`** | 256 | 252 | Standard subnet size. Good default. |
+| **`/20`** | 4,096 | 4,092 | GKE Clusters (Pods need lots of IPs). |
+| **`/16`** | 65,536 | 65,532 | Very large networks. |
+| **`/0`** | All IPs | - | The entire Internet (`0.0.0.0/0`). |
+
+> **Note**: GCP reserves **4 IP addresses** in every subnet (Network, Gateway, Reserved, Broadcast). A `/29` gives you only 4 usable IPs!
+
+### Historical Note: Class A, B, C (The Old Way)
+Before CIDR, networks were fixed sizes:
+*   **Class A**: Massive networks (`/8`).
+*   **Class B**: Medium networks (`/16`).
+*   **Class C**: Small networks (`/24`).
+*   **Importance for Exam**: **None**. Modern cloud networking uses CIDR. Ignore outdated references to "Class C networks" unless they just mean "a /24 subnet".
+
+### RFC 1918: Private Ranges (Memorize These)
+These are the IP ranges you *must* use for your private VPC subnets to avoid internet conflict.
+1.  `10.0.0.0/8` (Most common in Cloud)
+2.  `172.16.0.0/12`
+3.  `192.168.0.0/16` (Common in home routers)
 
 ---
 

@@ -16,6 +16,9 @@ Choosing the correct Load Balancer is the #1 Networking question type on the PCA
     *   Preserves Client IP (Passthrough).
     *   **Types**: Network TCP/UDP, Internal HTTP(S), Internal TCP/UDP.
 
+### Visual Architecture
+![GCP Load Balancing Architecture](images/gcp_lb_architecture.png)
+
 ### B. Internal vs. External
 *   **External**: Internet-facing.
 *   **Internal**: VPC-facing (Private IPs only).
@@ -58,19 +61,26 @@ Choosing the correct Load Balancer is the #1 Networking question type on the PCA
 
 ## 5. PCA Decision Tree (Memorize This)
 
+### Official Flowchart
+![Decision Tree](images/gcp_lb_decision_tree.png)
+
 **Question 1: Is the traffic HTTP/HTTPS?**
 *   **YES** -> Use **HTTP(S) Load Balancer**.
     *   Global? -> Global External HTTP(S).
     *   Private? -> Internal HTTP(S).
 
-**Question 2: Is it TCP/UDP (Non-HTTP)?**
+**Question 2: Is it UDP?**
+*   **YES** -> **Network Load Balancer** (External) or **Internal TCP/UDP LB**.
+    *   *Note*: The Proxy LBs (SSL/TCP) **cannot** handle UDP.
+
+**Question 3: Is it TCP (Non-HTTP)?**
 *   **YES**:
     *   Do you need SSL offload? -> **SSL Proxy**.
-    *   Do you need Global Anycast? -> **TCP Proxy**.
-    *   Do you need to see the Original Client IP? -> **Network TCP/UDP LB**.
+    *   Do you need Global Anycast **OR IPv6 Termination**? -> **TCP Proxy**.
+    *   Do you need to see the Original Client IP (Preserve IP)? -> **Network TCP/UDP LB**.
     *   Is it Internal only? -> **Internal TCP/UDP LB**.
 
-**Question 3: Does the app use Websockets?**
+**Question 4: Does the app use Websockets?**
 *   HTTP(S) LB supports Websockets natively.
 
 ---

@@ -65,6 +65,17 @@ In GCP, security is based on the **Zero Trust** model. You don't trust the netwo
 
 ---
 
+## 6. Cloud NAT (Network Address Translation)
+
+*   **Definition**: NAT allows multiple VMs to share a single public IP address for *outbound* connections.
+*   **The Problem**: Private GKE Clusters and secure VMs often have **No External IP address** to reduce attack surface. However, they still need to download OS patches or Docker images from the internet.
+*   **The Solution**: **Cloud NAT**.
+    *   **Outbound Only**: Allows private VMs to initiate connections to the internet.
+    *   **No Inbound**: It does *not* allow the internet to initiate connections to the VM.
+    *   **Managed Service**: It is regional, high availability, and not a single instance (no bottleneck).
+
+---
+
 ## PCA Decision Matrix: Network Security
 
 | Requirement | Solution |

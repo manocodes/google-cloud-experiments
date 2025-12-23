@@ -143,6 +143,9 @@ The exam tests if you know the **secure** way to connect diverse systems.
 
 
 ## 9. Detailed Study Guides
-*   **Compute Engine**: [gcp_compute_engine_study_plan.md](./gcp_compute_engine_study_plan.md) - Comprehensive deep dive into GCE, including machine types, MIGs, and storage options.
-*   **App Engine**: [gcp_app_engine_study_guide.md](./gcp_app_engine_study_guide.md) - Deep dive into GAE Standard vs. Flexible and exam strategy.
-*   **Cloud Storage**: [gcp_storage_pca_cram_sheet.md](./gcp_storage_pca_cram_sheet.md) - Cram sheet for Cloud Storage classes, locations, and consistency.
+*   **Compute Engine**: [gcp_compute_engine_study_plan.md](./compute/gcp_compute_engine_study_plan.md) - Comprehensive deep dive into GCE, including machine types, MIGs, and storage options.
+*   **App Engine**: [gcp_app_engine_study_guide.md](./compute/gcp_app_engine_study_guide.md) - Deep dive into GAE Standard vs. Flexible and exam strategy.
+*   **Cloud Storage**: [gcp_storage_pca_cram_sheet.md](./storage/gcp_storage_pca_cram_sheet.md) - Cram sheet for Cloud Storage classes, locations, and consistency.
+*   **Block Storage**: [gcp_block_storage_pca_cram_sheet.md](./storage/gcp_block_storage_pca_cram_sheet.md) - Deep dive into Persistent Disk, Local SSD, and Filestore.
+*   **Filestore**: [gcp_filestore_pca_cram_sheet.md](./storage/gcp_filestore_pca_cram_sheet.md) - Managed NFS for shared filesystems and legacy apps.
+*   **Storage Comparison**: [gcp_storage_comparison.md](./storage/gcp_storage_comparison.md) - The "Big 3" Comparison Table (Object vs Block vs File).

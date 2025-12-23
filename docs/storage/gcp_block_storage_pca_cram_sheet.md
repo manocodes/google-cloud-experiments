@@ -17,13 +17,33 @@ Memorize the use cases for the 4 main types + Local SSD.
 | **Standard** | `pd-standard` | **Cost save**. Cold data, backups, logging. HDD based. | Low IOPS. |
 | **Balanced** | `pd-balanced` | **Default choice**. Web apps, general DBs. SSD based. | Medium IOPS. |
 | **SSD** | `pd-ssd` | **Performance**. High-perf NoSQL/SQL databases. | High IOPS. |
-| **Extreme** | `pd-extreme` | **Massive Scale**. Oracle, SAP HANA. | Provisioned IOPS (Target). |
+| **Extreme** | `pd-extreme` | **Massive Scale DBs** (e.g. running Oracle, SAP HANA). | Provisioned IOPS (Target). |
 | **Local SSD** | `local-ssd` | **Cache / Temp**. Scratch space. Ephemeral. | **Highest** Latency/IOPS. |
 
 ### Note on Local SSD (The "Trap")
 *   **Ephemeral:** Data is **LOST** if you `Stop` the VM.
 *   **Physical:** Attached directly to the server (not network).
 *   **Use Case:** Cache layers (Redis), temp processing, NoSQL with app-level replication (Cassandra). **NEVER** for critical persistent data.
+
+### 2.1 Critical Concept: IOPS vs. Throughput
+*   **IOPS (Input/Output Operations Per Second):** The number of individual read/write actions.
+    *   *Analogy:* **Car Engine RPM**. How fast the engine spins.
+    *   *Importance:* Critical for **Transaction Processing (OLTP)** databases (e.g., Many users buying tickets at once). Small, random reads/writes.
+*   **Throughput (MB/s):** The total volume of data moved.
+    *   *Analogy:* **Car Speed (MPH)**. How much distance (data) you cover.
+    *   *Importance:* Critical for **Streaming & Analytics (OLAP)** (e.g., Reading a large video file or scanning a whole table). Large, sequential reads/writes.
+*   **The Formula:** `Throughput = IOPS * Block Size`
+    *   *Exam Tip:* If your IOPS are high but Throughput is low, your Block Size is too small.
+
+### 2.2 HDD vs. SSD (The Physics)
+*   **HDD (Hard Disk Drive) -> `pd-standard`**
+    *   **Mechanism:** Spinning magnetic platters with a mechanical arm.
+    *   **Pros:** Cheap ($), Good for purely sequential reads (large video files).
+    *   **Cons:** **High Latency**. The arm takes time to physically move to the data. **Low IOPS** for random access.
+*   **SSD (Solid State Drive) -> `pd-ssd`, `pd-balanced`**
+    *   **Mechanism:** Flash memory chips (Microchips). No moving parts.
+    *   **Pros:** **Instant Access** (Low Latency), **High IOPS** (Random reads/writes are fast).
+    *   **Cons:** Expensive ($$$).
 
 ---
 

@@ -45,3 +45,19 @@ This is the ultimate summary to decide which storage service to pick in the exam
 | "Shared directory", "NFS", "Legacy Application", "Lift and Shift" | **Filestore** |
 | "SMB", "Windows Shared" | **NetApp Cloud Volumes** (Not Filestore!) |
 | "Transient", "Cache", "Scratch", "lost on stop" | **Local SSD** |
+
+---
+
+## 4. Specialized Storage (DevOps & Managed)
+These services *use* storage (usually GCS) under the hood, but are managed as specific tools.
+
+*   **Artifact Registry** (Evolution of Container Registry):
+    *   **What is it?** A manager for Docker Images, Maven/npm packages, Helm charts.
+    *   **Storage Type:** Uses Cloud Storage buckets (managed by Google) to store the layers.
+    *   **Exam Context:** "Where do I push my Docker container?" or "Private repository for build artifacts."
+    *   **Key Distinction:** It is **NOT** for general file storage. It is for **Versioning software packages**.
+
+*   **Cloud SQL / Spanner / Bigtable**:
+    *   **What is it?** Managed Databases.
+    *   **Storage Type:** They primarily use **Persistent Disks** (Block) under the hood (Colossus filesystem), but you interact via SQL/API, not filesystem commands.
+

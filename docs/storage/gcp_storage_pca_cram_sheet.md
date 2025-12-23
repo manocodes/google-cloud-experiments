@@ -66,6 +66,14 @@ Memorize the use cases and minimum storage durations.
 *   **Signed URLs:** Give time-limited access to a specific object for a user *without* a generic GCP account.
 *   **Signed Policy Documents:** Specify what can be uploaded (size, type) for users uploading content directly to GCS.
 
+### 4.1 Cloud Storage for Firebase (Mobile/Web Focus)
+If the exam asks about **"Mobile App Users uploading photos directly"**, this is the answer.
+*   **What is it?** A wrapper around standard GCS buckets.
+*   **Key Features:**
+    *   **Mobile SDKs:** Handles flaky networks (pauses/resumes uploads automatically) for iOS/Android/Web.
+    *   **Security:** Integrates with **Firebase Authentication** (not just IAM). You write "Security Rules" like `allow read if request.auth != null`.
+*   **Under the hood:** It stores files in *your* GCS bucket. You can access them via `gsutil` or Python API on the backend just like normal GCS objects.
+
 ---
 
 ## 5. Performance & Interaction

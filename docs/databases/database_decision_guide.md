@@ -39,3 +39,23 @@ This guide simplifies the decision-making process for choosing a database servic
 -   **"Lift and Shift Oracle"**: **Bare Metal Solution** (if preserving license/hardware reqs) or refactor to **Spanner/Cloud SQL**.
 -   **"Global User Base"**: If read-heavy, Cloud SQL + Read Replicas *might* work. If write-heavy everywhere, **Spanner**.
 -   **"JSON"**: Firestore is the default "JSON" store. BigQuery also handles JSON natively now, but for analytics.
+
+## Key Performance Terminology for Exam
+
+Understanding these metrics is vital for choosing between Cloud SQL, Spanner, and Bigtable.
+
+1.  **QPS (Queries Per Second)**:
+    *   **Definition**: A measure of **Throughput**. How many requests the database handles every second.
+    *   **Scale**:
+        *   **Cloud SQL**: Thousands to tens of thousands.
+        *   **Cloud Spanner**: Millions (Horizontal scaling).
+        *   **Bigtable**: Millions (Linear scaling).
+2.  **Latency**:
+    *   **Definition**: The time it takes for a *single* query to return.
+    *   **Scale**:
+        *   **Memorystore**: Microseconds (Fastest).
+        *   **Bigtable/Cloud SQL/Spanner**: Milliseconds.
+        *   **BigQuery**: Seconds (or minutes for huge jobs).
+3.  **TPS (Transactions Per Second)**:
+    *   Similar to QPS but specifically for write transactions (INSERT/UPDATE/DELETE) that require ACID guarantees.
+

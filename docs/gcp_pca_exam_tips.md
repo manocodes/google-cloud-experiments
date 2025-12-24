@@ -149,3 +149,6 @@ The exam tests if you know the **secure** way to connect diverse systems.
 *   **Filestore**: [gcp_filestore_pca_cram_sheet.md](./storage/gcp_filestore_pca_cram_sheet.md) - Managed NFS for shared filesystems and legacy apps.
 *   **Storage Comparison**: [gcp_storage_comparison.md](./storage/gcp_storage_comparison.md) - The "Big 3" Comparison Table (Object vs Block vs File).
 *   **Data Transfer**: [gcp_data_transfer_pca_cram_sheet.md](./storage/gcp_data_transfer_pca_cram_sheet.md) - Decision matrix for gsutil vs STS vs Appliance.
+*   **Databases**: [gcp_databases_pca_cram_sheet.md](./databases/gcp_databases_pca_cram_sheet.md) - Deep dive into Cloud SQL, Spanner, AlloyDB, and BigQuery.
+*   **Data Loss Prevention**: [gcp_dlp_pca_cram_sheet.md](./databases/gcp_dlp_pca_cram_sheet.md) - Deep dive into Cloud DLP for data classification and protection.
+

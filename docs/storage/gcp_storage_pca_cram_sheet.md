@@ -10,6 +10,9 @@ Object storage service for companies of all sizes. Stores any amount of data and
     *   *Analogy:* Like a Domain Name (DNS). `my-bucket` is unique across **ALL** Google Cloud customers.
     *   *Why?* Because every bucket is accessible via a public URL: `https://storage.googleapis.com/YOUR_BUCKET_NAME`. If names weren't unique, these URLs wouldn't work.
     *   **Note:** This only applies to the **Bucket**. Folders (sub-directories) *inside* the bucket do **not** need to be globally unique. You can have `gs://company-a/finance` and `gs://company-b/finance`.
+    *   **Reuse after Deletion:**
+        *   **Same Project:** Available **Immediately** (typically).
+        *   **Different Project:** Can take **10+ minutes** (up to hours) to release. Do not rely on fast release for transfer between projects.
 
 ### 1.1 Object vs. Block Storage (Fundamental)
 The exam often checks if you know when to use GCS vs. Persistent Disk.
@@ -34,14 +37,22 @@ The exam often checks if you know when to use GCS vs. Persistent Disk.
 ## 2. Storage Classes (CRITICAL)
 Memorize the use cases and minimum storage durations.
 
-| Class | Use Case | Availability (Multi-Region) | Min Storage Duration | Retrieval Cost |
-| :--- | :--- | :--- | :--- | :--- |
-| **Standard** | Hot data, frequently accessed, websites, streaming. | 99.95% | None | None |
-| **Nearline** | Infrequent access (once per month). Data backups, long-tail multimedia. | 99.95% | 30 days | Low |
-| **Coldline** | Rare access (once per quarter/90 days). DR, compliance. | 99.90% | 90 days | Medium |
-| **Archive** | Very rare (once per year). Regulatory archiving, tape replacement. | 99.90% | 365 days | High |
+| Class | Use Case | Storage Cost | Retrieval Cost | Min Duration | Availability |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Standard** | Hot data, frequent access. | **Highest** | **None** | None | 99.95% |
+| **Nearline** | Monthly access. Backups. | Medium | Low | 30 days | 99.95% |
+| **Coldline** | Quarterly access. DR. | Low | High | 90 days | 99.90% |
+| **Archive** | Yearly access. Tape repl. | **Lowest** | **Highest** | 365 days | 99.90% |
 
 *   **Autoclass:** Automatically transitions objects to appropriate classes based on access patterns.
+
+### 2.1 What is "Retrieval Cost"?
+It is a **Fee per GB** for reading data.
+*   **Standard:** $0.00 per GB (Free to read your own data).
+*   **Nearline:** ~$0.01 per GB.
+*   **Coldline:** ~$0.02 per GB.
+*   **Archive:** ~$0.05 per GB.
+*   *Exam Tip:* If you have a 10TB backup in **Archive** and you need to restore the *entire* thing, it will cost you a lot ($500+). But storing it for the year only cost you peanuts.
 
 ---
 

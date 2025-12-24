@@ -46,7 +46,10 @@ Best for developers and small ops.
 *   **Parallelism:** ALWAYS use `gsutil -m cp ...` for multi-threading. Increases speed significantly for many small files.
 *   **Composite Uploads:** For large files, it splits them into chunks, uploads in parallel, and composes them in GCS.
 *   **Resumable Uploads:** Enabled by default for large files. If connection drops, it picks up where it left off.
-*   **Limitations:** It runs on *your* machine. If you close your laptop, transfer stops. Not for PBs of data.
+*   **Limitations:**
+    *   **Local Machine:** Stops if you close laptop.
+    *   **Cloud Shell:** Stops if the session times out (~1 hour of inactivity). It is **NOT** a background worker.
+    *   **Fix:** Use a **VM** (Compute Engine) with `screen`/`tmux` or Storage Transfer Service for long jobs.
 
 ---
 

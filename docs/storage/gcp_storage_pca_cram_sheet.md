@@ -6,6 +6,10 @@ Object storage service for companies of all sizes. Stores any amount of data and
 *   **Capacity:** Unlimited.
 *   **Consistency:** Strong global consistency for all operations (read-after-write, overwrite, delete).
 *   **Protocol:** HTTP/HTTPS (REST API).
+*   **Naming:** **Globally Unique**. Bucket names share a single global namespace. You cannot name a bucket `test` because someone else took it.
+    *   *Analogy:* Like a Domain Name (DNS). `my-bucket` is unique across **ALL** Google Cloud customers.
+    *   *Why?* Because every bucket is accessible via a public URL: `https://storage.googleapis.com/YOUR_BUCKET_NAME`. If names weren't unique, these URLs wouldn't work.
+    *   **Note:** This only applies to the **Bucket**. Folders (sub-directories) *inside* the bucket do **not** need to be globally unique. You can have `gs://company-a/finance` and `gs://company-b/finance`.
 
 ### 1.1 Object vs. Block Storage (Fundamental)
 The exam often checks if you know when to use GCS vs. Persistent Disk.

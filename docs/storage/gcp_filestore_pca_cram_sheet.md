@@ -6,6 +6,16 @@ Fully managed **NFS (Network File System)** server for applications that need a 
 *   **Access:** Mounted by thousands of COMPUTE instances (GCE, GKE) simultaneously.
 *   **The "Why":** For "Lift and Shift" legacy apps that hardcode file paths names like `/data/shared/` and expect POSIX compliance (read/write/lock).
 
+### 1.1 Real World Scenario: The "Shared Drive" (Data Analytics)
+Imagine you have **50 Data Scientist VMs**. They all need to read the *same* 10TB dataset and write to a *shared* results folder.
+*   **The Problem:** If you put the data on a disk, only one VM can read it. If you copy it to 50 disks, it costs 50x money and is out of sync.
+*   **The Filestore Solution:**
+    1.  **Create:** You spin up one Filestore instance (IP: `10.0.0.5`).
+    2.  **Mount:** On **ALL 50 VMs**, you run the Linux command: `mount 10.0.0.5:/data /mnt/shared_analysis`.
+    3.  **The Magic:** To the Python script running on the VM, `/mnt/shared_analysis` looks like a local folder.
+    4.  **Result:** When Scientist A saves a file named `results.csv` into that folder, Scientist B (on a different computer) can immediately see and read `results.csv`.
+*   **Key Concept:** It is a **Many-to-One** relationship. Many clients (VMs) talk to One Storage engine simultaneously.
+
 ---
 
 ## 2. Service Tiers (CRITICAL)

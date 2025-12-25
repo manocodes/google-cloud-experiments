@@ -1,6 +1,6 @@
-# Compute Engine & OS Concepts: The "No-CLI" Guide for Architects
+# Compute Engine & OS Concepts: The "No-CLI" Guide
 
-> **Target Audience:** Product Managers, Strategists, and Architects who need to understand *system behavior* without memorizing *system administration commands*.
+> **Target Audience:** Architects and Technical Leads who need to understand *system behavior* without memorizing *system administration commands*.
 
 ## The Golden Rule
 **You are designing the house, not plumbing the sink.**
@@ -24,7 +24,8 @@ From the outside, GCP has no idea if the OS is using 1% or 99% of its RAM. This 
 - **Without Agent:** GCP sees CPU, Disk I/O, Network.
 - **With Agent:** GCP sees Memory, Disk Space (User-level).
 
-> **PM Takeaway:** If the requirement mentions scaling or monitoring "Memory" or "Disk Space" (not Disk I/O), the answer MUST involve installing an Agent.
+> **Key Takeaway:** If the requirement mentions scaling or monitoring "Memory" or "Disk Space" (not Disk I/O), the answer MUST involve installing an Agent.
+> **Exam Tip:** Look for the metric `agent.googleapis.com/memory/percent_used`. Standard metrics are `compute.googleapis.com/...`.
 
 ---
 
@@ -40,6 +41,8 @@ You give the VM a list of instructions to run *every time it boots*.
 - `git clone my-app`
 - `run app`
 
+**Implementation:** You set this in the **Metadata** of the instance using the key `startup-script` or `startup-script-url`.
+
 **Pros:** Flexible. easy to change code (just update the repo).
 **Cons:** Slow boot time (has to install everything every time). If the repo is down, the server fails to start.
 
@@ -51,7 +54,7 @@ You set up one server perfectly, "bake" it into an image, and launch 1,000 copie
 **Pros:** Fast boot time. Reliable (no external downloads at boot).
 **Cons:** "Immutable". To change the code, you must build a new image and redeploy.
 
-> **PM Takeaway:**
+> **Key Takeaway:**
 > - Need **fast scaling**? Use **Custom Images**.
 > - Need **frequent, minor config updates**? Use **Startup Scripts**.
 > - Best Practice? **Hybrid**. Bake the heavy stuff (Python, Java) into the Image. Use Startup Script for the last-mile config (Environment variables, grabbing the latest jar).
@@ -62,7 +65,7 @@ You set up one server perfectly, "bake" it into an image, and launch 1,000 copie
 
 ### The Old Way: SSH Keys
 Manually copying a text file (public key) to the server.
-**PM Risk:** Who has the key? Did the ex-employee keep it? It's a "Shared Secret" nightmare.
+**Risk:** Who has the key? Did the ex-employee keep it? It's a "Shared Secret" nightmare.
 
 ### The Google Way: OS Login
 Connects the Linux User system directly to **Google Cloud IAM**.
@@ -70,7 +73,8 @@ Connects the Linux User system directly to **Google Cloud IAM**.
 - No keys to manage.
 - Complete audit trail of who logged in.
 
-> **PM Takeaway:** The answer for "Secure Management of SSH" is almost always **enable OS Login**.
+> **Key Takeaway:** The answer for "Secure Management of SSH" is almost always **enable OS Login**.
+> **Implementation:** Set the project-wide (or instance-level) metadata key: `enable-oslogin = TRUE`.
 
 ---
 
@@ -84,7 +88,8 @@ The **Serial Console** is like walking into the datacenter and plugging a monito
 - You can see the kernel "panic" (crash) logs.
 - You can log in via text-only mode to fix the firewall.
 
-> **PM Takeaway:** If an instance is "unreachable via the network," the debugging step is "Check the Serial Console output."
+> **Key Takeaway:** If an instance is "unreachable via the network," the debugging step is "Check the Serial Console output."
+> **Note:** To interact with the serial console (login), you need the `serial-port-enable=TRUE` metadata.
 
 ---
 
@@ -98,7 +103,7 @@ To survive, the Linux Kernel summons the **OOM (Out of Memory) Killer**.
 - It looks for the "most expensive" tenant (usually your main application).
 - It **kills the process immediately** to free up RAM.
 
-**PM Risk:** Your server didn't "slow down"; it crashed. The application process just vanished.
+**Risk:** Your server didn't "slow down"; it crashed. The application process just vanished.
 
 ### Swap Memory (The Fake RAM)
 You can configure a portion of the Hard Disk (Disk) to act like RAM.
@@ -111,14 +116,14 @@ Linux hates wasted space. If you have 10GB of RAM and your app only uses 2GB, Li
 - **Active Memory:** Actually used by your app.
 - **Cached/Buffered:** Used by the OS to speed up disk access, but *instantly available* if the app needs it.
 
-> **PM Takeaway:**
+> **Key Takeaway:**
 > - If you see "99% Memory Usage" in a tool, check if it's **Active** or **Cached**. 99% Cached is *good*. 99% Active is *danger*.
 > - If an instance mysteriously restarts or the app process disappears, check the logs for **"OOM Killer"**.
 
 ---
-## 6. Linux Terminology Cheat Sheet (PM Translation)
+## 6. Linux Terminology Cheat Sheet
 
-| Tech Term | PM Translation | Exam Context |
+| Tech Term | Conceptual Translation | Exam Context |
 | :--- | :--- | :--- |
 | **User Data / Metadata** | **Global Variables** | Passing config (DB URL, API Key) to the instance without hardcoding it. |
 | **fstab** | **Disk Mounting List** | If you detach a disk but forget to remove it from here, the server might refuse to boot. |

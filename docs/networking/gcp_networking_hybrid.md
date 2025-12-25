@@ -24,10 +24,12 @@ Private traffic over a **dedicated physical line** (Traffic does NOT touch the p
     *   **Physical**: You connect to a Service Provider (ISP) who connects to Google.
     *   **Capacity**: Flexible (50 Mbps up to 10 Gbps).
     *   **Use Case**: You aren't physically near a Google facility, or don't need a full 10 Gbps pipe.
+    *   **SLA**: Varies. Google guarantees 99.99% or 99.9% *only* to the Partner edge. The Partner must provide their own SLA for the rest of the link.
 
 ### C. Direct Peering / Carrier Peering
 *   **NOT for VPC access**: This connects to Google *Public* Services (YouTube, Workspace APIs) without hitting the public internet. It does *not* give you access to your private VPC VMs.
 *   **Exam Trap**: If the question asks to connect to a *private VM*, Peering is the Wrong Answer. Use Interconnect or VPN.
+*   **MTU Trap**: Cloud VPN tunnels have a specific MTU (usually 1460 bytes). If on-prem servers enforce 1500 bytes and don't allow fragmentation, packets will drop. **Clamp MSS** on the VPN gateway or adjust MTU on VMs.
 
 ---
 

@@ -22,6 +22,7 @@ Know a 1-sentence definition to rule these **in** or **out** as distractors.
 *   **Data/AI**: Dataflow, Dataproc, Pub/Sub, Vertex AI.
 *   **Security**: Cloud Armor, DLP API.
 *   **Migration**: Migrate for Compute Engine.
+*   **GenAI**: **Vertex AI** (The platform), **Gemini** (The models). Know that "Duet AI" is the assistant in the console/IDE.
 
 ---
 
@@ -129,6 +130,7 @@ The exam tests if you know the **secure** way to connect diverse systems.
 *   **The "Correct" Pattern (External/Multi-Cloud)**: Use **Workload Identity Federation**.
     *   *Scenario:* AWS EC2, Azure VM, or GitHub Actions needs to access BigQuery.
     *   *Action:* Configure a Workload Identity Pool. Exchange the AWS/Azure token for a short-lived Google token. **No JSON keys involved.**
+132.    *   **Exam Tip**: If you see "Download JSON key" as an option, it is 99% likely WRONG. Look for "Workload Identity Federation".
 
 ### Debugging Access Issues
 *   **"Works on my machine, fails in prod"**: This is almost always an **ADC Identity Mismatch**.

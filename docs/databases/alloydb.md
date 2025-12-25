@@ -14,12 +14,14 @@
 
 ## Traps & "Gotchas"
 1. **Migration**: If Cloud SQL for Postgres isn't fast enough, don't jump straight to Spanner (which requires schema changes). Try AlloyDB first (drop-in replacement).
-2. **Regional**: Like Cloud SQL, it is a Regional resource (HA within region), not Global like Spanner.
+2. **Regional Resource**: Like Cloud SQL, it is Regional (HA within region). Cross-region replication exists but is a specific configuration step. Don't assume "Global" magic like Spanner.
 
 ## Important Points / Exam Clues
 - Keywords: "High Performance Postgres", "HTAP", "Columnar store in memory", "Legacy modernization".
-- **Downtime**: Supports maintenance with near-zero downtime (<1s) compared to Cloud SQL.
+- **Downtime**: Maintenance updates are near-zero downtime (<1s), significantly better than standard Cloud SQL maintenance windows.
+- **AlloyDB Omni**: The downloadable version of AlloyDB that runs anywhere (on-prem, AWS, Azure, Laptop). Good for hybrid consistency.
 
 ## Tips
 - Requirement: "Postgres workload, need higher performance than Cloud SQL" -> **AlloyDB**.
 - Requirement: "Real-time analytics on operational data in Postgres" -> **AlloyDB** (due to columnar engine).
+- Requirement: "Move Oracle/SQL Server to open source with high-end needs" -> **AlloyDB** (often the target for legacy database modernization).

@@ -160,3 +160,15 @@ For the PCA exam, remember that logs disappear after 30 days unless you create a
 - **BigQuery:** For long-term SQL analysis of your logs.
 - **Cloud Storage:** For cheap, multi-year compliance storage.
 - **Pub/Sub:** To trigger *other* code whenever a specific log happens.
+
+## ⚙️ Log Router & Cost Management
+
+*   **Log Router**: The engine that checks every log against rules.
+*   **Log Sink**: The rule itself ("If text matches 'ERROR', send to BigQuery").
+*   **Exclusion Filters**: **Money Saver**.
+    *   *Scenario*: Your load balancer logs 200 OK health checks 10 times a second. You pay for that ingestion.
+    *   *Solution*: Create an Exclusion Filter in Log Router to **drop** 200 OK logs from `HTTP Load Balancer`. They never hit storage, so you pay $0.
+
+## 🔐 Audit Logs (Data Access)
+*   **Admin Activity**: (On by Default). "Who created the bucket?" - Free.
+*   **Data Access**: (Off by Default). "Who read file.txt?" - High volume, costs money. Must enable explicitly.

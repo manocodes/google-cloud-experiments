@@ -44,7 +44,7 @@ This document provides a technical deep dive into the four official case studies
 | :--- | :--- | :--- |
 | **Real-time Ingestion** | **Cloud Pub/Sub** | Decouples telemetry ingestion from processing. Handles traffic spikes during races. |
 | **Stream Processing** | **Dataflow** | Processes raw telemetry data in real-time (e.g., calculating leaderboards, filtering noise) before writing to storage. |
-| **Video Delivery** | **Cloud CDN** + **Media CDN** | Caches video content at the edge to minimize buffering for global viewers. |
+| **Video Delivery** | **Media CDN** | Specialized CDN for massive media delivery (based on YouTube's infrastructure). Superior to standard Cloud CDN for streaming. |
 | **Prediction Models** | **Vertex AI (TensorFlow)** | For training models on historical data and serving real-time predictions during races. |
 | **API Management** | **Apigee** | Requirements mention "exposing data to partners" and "monetization." Apigee handles quotas, billing, and security better than API Gateway. |
 | **Data Warehouse** | **BigQuery** | For season-long analytics and historical data querying. |
@@ -68,7 +68,7 @@ This document provides a technical deep dive into the four official case studies
 ### Solution Architecture
 | Role | Recommended Google Cloud Service | Reasoning |
 | :--- | :--- | :--- |
-| **Compute Game Server** | **GKE** with **Auto-scaling** | GKE is ideal for stateless game servers. Kubernetes Horizontal Pod Autoscaler allows rapid scale-up/down. |
+| **Compute Game Server** | **GKE** with **Agones** | GKE is ideal for stateless game servers. **Agones** is the standard open-source K8s game server orchestrator (Exam Keyword). |
 | **Global Leaderboard** | **Cloud Memorystore (Redis)** | For sub-millisecond, real-time leaderboard updates. *Note: Use Cloud Spanner if "globally strong consistency" is strictly required, but Redis is standard for gaming speed.* |
 | **Database (Transactional)** | **Cloud Spanner** | The specific need for a "global" database scaling to millions of users often points to Spanner over Cloud SQL. |
 | **Telemetry Analysis** | **BigQuery** | Ingesting massive amounts of game event logs for analytics (e.g., "Why do players quit level 3?"). |

@@ -11,6 +11,13 @@ A **Principal** is the "Who" in IAM (Identity and Access Management). It represe
 *   **Google Group**: A collection of accounts (e.g., `admins@example.com`).
 *   **Google Workspace Domain**: All users in an organization (`@company.com`).
 
+## 1.1 Regions and Zones
+*   **Region**: A specific geographical location (e.g., `us-central1` Iowa). Contains 3+ Zones.
+*   **Zone**: A deployment area within a region (e.g., `us-central1-a`). A "Zone" is roughly equivalent to a datacenter.
+*   **Zonal Resource**: Lives in one zone (VM, Disk). Fails if zone fails.
+*   **Regional Resource**: Lives across zones (Subnet, Static IP, Regional Managed Instance Group). Survives zonal failure.
+*   **Global Resource**: Lives across the world (VPC, Global Load Balancer, Cloud Identity).
+
 ## 2. IAM Role Types
 Roles define "What" a principal can do. They are collections of permissions.
 

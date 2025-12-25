@@ -18,6 +18,7 @@ Memorize the use cases for the 4 main types + Local SSD.
 | **Balanced** | `pd-balanced` | **Default choice**. Web apps, general DBs. SSD based. | Medium IOPS. |
 | **SSD** | `pd-ssd` | **Performance**. High-perf NoSQL/SQL databases. | High IOPS. |
 | **Extreme** | `pd-extreme` | **Massive Scale DBs** (e.g. running Oracle, SAP HANA). | Provisioned IOPS (Target). |
+| **Hyperdisk** | `hyperdisk` | **Next Gen**. Extreme high performance (throughput/IOPS decoupled). | Highest Cloud Performance. |
 | **Local SSD** | `local-ssd` | **Cache / Temp**. Scratch space. Ephemeral. | **Highest** Latency/IOPS. |
 
 ### Note on Local SSD (The "Trap")

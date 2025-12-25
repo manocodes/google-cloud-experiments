@@ -88,6 +88,12 @@ Master the nuances of Google Compute Engine (GCE) specifically for the Professio
 *   **OS Login:**
     *   The "secure" way to manage SSH access using IAM roles instead of managing SSH keys in metadata.
     *   Connects SSH access to the corporate identity (useful for deprovisioning).
+*   **Observability (Ops Agent)**:
+    *   The **Ops Agent** is the standard for collecting logs and metrics. Replacing the legacy Logging/Monitoring agents.
+    *   *Exam Tip*: If you need memory/disk utilization metrics, you **MUST** install the Ops Agent (Standard GCP metrics only see CPU/Network/Disk I/O from the hypervisor level).
+*   **VM Manager (OS Config)**:
+    *   Fully managed service for **Patch Management**, OS Inventory, and Configuration Management.
+    *   *Exam Tip*: "How to ensure all fleet VMs have the latest security patch?" -> **OS Patch Management** (part of VM Manager).
 
 ### 5. Cost Optimization
 **Key Concepts:**

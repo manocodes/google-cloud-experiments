@@ -4,17 +4,19 @@ A Python project for experimenting with Google Cloud Platform features.
 
 ## Project Structure
 
-```
 google-cloud/
+├── docs/                 # STUDY GUIDES (The core value)
+│   ├── compute/          # GCE, GKE, Cloud Run, Functions
+│   ├── databases/        # SQL, Spanner, Bigtable, Firestore
+│   ├── networking/       # VPC, LB, Interconnect, Security
+│   ├── storage/          # GCS, Block, Filestore, Transfer
+│   ├── security/         # IAM, Org Policy, Hierarchy
+│   └── general/          # Case Studies, Tips, Concepts
 ├── src/
-│   └── experiments/      # Main application code
-├── tests/                # Test files
-├── scripts/              # Utility scripts
-├── .env.example          # Example environment variables
-├── requirements.txt      # Project dependencies
-├── pyproject.toml        # Project configuration
-└── README.md            # This file
-```
+│   └── experiments/      # Python code experiments
+├── requirements.txt      # Dependencies
+└── README.md             # This file
+
 
 ## Setup
 

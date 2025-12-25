@@ -73,6 +73,15 @@ In GCP, security is based on the **Zero Trust** model. You don't trust the netwo
     *   **Outbound Only**: Allows private VMs to initiate connections to the internet.
     *   **No Inbound**: It does *not* allow the internet to initiate connections to the VM.
     *   **Managed Service**: It is regional, high availability, and not a single instance (no bottleneck).
+    *   *Note*: Cloud NAT does *not* offer security filtering (IDS/IPS). It just does translation. Use Cloud firewall for filtering.
+
+---
+
+## 7. Cloud IDS & Packet Mirroring
+
+*   **Packet Mirroring**: Copies traffic from specific VMs and sends it to a "Collector" ILB. Used for custom security analysis tools (NTA/NDR).
+*   **Cloud IDS**: A fully managed Intrusion Detection System powered by Palo Alto Networks. It uses Packet Mirroring under the hood to detect severe threat patterns (malware, C2, spyware).
+    *   *Exam Keyword*: "Intrusion Detection", "Threat signatures", "Packet Capture".
 
 ---
 

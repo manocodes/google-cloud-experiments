@@ -71,7 +71,7 @@ Choosing the correct Load Balancer is the #1 Networking question type on the PCA
 
 **Question 2: Is it UDP?**
 *   **YES** -> **Network Load Balancer** (External) or **Internal TCP/UDP LB**.
-    *   *Note*: The Proxy LBs (SSL/TCP) **cannot** handle UDP.
+    *   *Note*: The Proxy LBs (SSL/TCP) and HTTP(S) LBs **cannot** handle UDP. UDP is always Regional.
 
 **Question 3: Is it TCP (Non-HTTP)?**
 *   **YES**:
@@ -84,6 +84,9 @@ Choosing the correct Load Balancer is the #1 Networking question type on the PCA
 *   HTTP(S) LB supports Websockets natively.
 
 ---
+87. **Question 5: Session Persistence (Affinity)?**
+88. *   **HTTP(S) LB**: Use **Generated Cookie** affinity. (Client IP affinity fails if users are behind a corporate proxy).
+89. *   **Network LB**: Use **Client IP** affinity (since it passes through).
 
 ## Summary Cheat Sheet
 

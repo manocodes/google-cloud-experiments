@@ -16,7 +16,8 @@
 - **Networking**: Accessible via **Private IP** (VPC Peering) or Private Service Connect. Not directly public.
 
 ## Traps & "Gotchas"
-1. **Persistence**: Memorystore for Redis offers optional persistence (RDB snapshots), but it's primarily a cache. If you need a durable *primary* database, don't rely solely on Memorystore.
+1. **Persistence**: Memorystore for Redis offers optional persistence (RDB snapshots), but it's primarily a cache. If you need a durable *primary* database, don't rely solely on Memorystore. Use Cloud SQL/Spanner as the source of truth.
+2. **Maintenance**: Standard Tier instances experience less disruption during maintenance due to failover, but basic tier instances essentially "reboot" (cache clear).
 2. **Global**: Memorystore is a **Regional** (or Zonal) service. No built-in global federation like Spanner.
 
 ## Important Points / Exam Clues

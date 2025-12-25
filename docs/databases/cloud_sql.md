@@ -7,7 +7,8 @@
 - **Scaling**: 
   - **Vertical**: Increase machine type (CPU/RAM). Requires restart.
   - **Horizontal**: Read replicas for read scaling. *Not* for write scaling (creates consistency lag).
-- **High Availability (HA)**: Regional (Multi-Zone). Standby instance in a different zone in the same region. Automatic failover.
+- **High Availability (HA)**: Regional (Multi-Zone). Standby instance in a different zone in the same region. Automatic failover (synchronous replication).
+- **Maintenance**: Automated patching. **Requires downtime** (usually < 60s). HA setup minimizes this but does *not* eliminate it.
 
 ## Critical Information
 - **Storage Limit**: Up to 64 TB (varies by engine, but 64 TB is the general max for Postgres/MySQL).
@@ -29,7 +30,8 @@
 ## Important Points / Exam Clues
 - Keywords: "Relational", "Existing MySQL/Postgres", "Web Framework", "Lift and Shift", "Transactional", "Strong Consistency".
 - **Cloud SQL Proxy**: Safe way to connect to Cloud SQL from GKE, Compute Engine, or local without managing SSL certificates or allowing authorized networks (public IP).
-- **Private Service Connect / Private IP**: standard way to connect securely within VPC.
+- **Private Service Connect (PSC)**: The modern, preferred way to connect securely within VPCs (prevents IP peering exhaustion issues of the older Private Services Access).
+- **Cloud SQL Auth Proxy**: Handles authentication seamlessly. Often the answer to "How to securely connect GKE to Cloud SQL".
 
 ## Tips
 - Always check if the requirements mention "Global Scale" or "Regional". Regional = Cloud SQL is a contender. Global = Spanner.

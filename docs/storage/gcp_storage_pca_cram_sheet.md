@@ -44,7 +44,9 @@ Memorize the use cases and minimum storage durations.
 | **Coldline** | Quarterly access. DR. | Low | High | 90 days | 99.90% |
 | **Archive** | Yearly access. Tape repl. | **Lowest** | **Highest** | 365 days | 99.90% |
 
-*   **Autoclass:** Automatically transitions objects to appropriate classes based on access patterns.
+| **Archive** | Yearly access. Tape repl. | **Lowest** | **Highest** | 365 days | 99.90% |
+48. *   **Autoclass**: Automatically transitions objects to appropriate classes based on access patterns.
+49. *   **Soft Delete**: **New Default**. Deleted objects are kept for 7 days (soft-deleted) by default. You can restore them. *Trap*: You pay for this storage unless you disable it.
 
 ### 2.1 What is "Retrieval Cost"?
 It is a **Fee per GB** for reading data.
@@ -110,6 +112,7 @@ Rules to automatically move or delete objects.
 *   **Action:** SetStorageClass, Delete.
 *   **Condition:** Age (days), CreatedBefore, NumberOfNewerVersions, IsLive (for versioned objects).
 *   *Example:* Move from Standard -> Nearline after 30 days -> Coldline after 90 days -> Delete after 365 days.
+*   **Inventory Reports**: Generate a daily CSV of all objects. Use this for analysis or creating lifecycle rules on massive buckets (cheaper than listing 1 million objects via API).
 
 ## 8. Object Versioning
 *   Keeps history of object overwrites/deletes.

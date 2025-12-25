@@ -33,6 +33,8 @@ When you see a keyword in the question, pick the corresponding product.
 | "SSH without Public IP" | **Identity-Aware Proxy (IAP)** |
 | "Private VM needs internet for updates" | **Cloud NAT** |
 | "Data Exfiltration Protection", "BigQuery Security" | **VPC Service Controls** |
+| "Intrusion Detection", "Packet Capture" | **Packet Mirroring / Cloud IDS** |
+| "Consume/Publish Service privately" | **Private Service Connect (PSC)** |
 
 ---
 

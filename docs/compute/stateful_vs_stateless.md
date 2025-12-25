@@ -58,6 +58,7 @@ If you have a legacy application that *requires* saving files to a local `C:\` d
 | **Web App (High Traffic)** | **Stateless** | **GKE / MIG (Compute)** | More control over networking/protocols than Cloud Run. |
 | **Database (MySQL/Postgres)** | **Stateful** | **Cloud SQL** | It's a managed service, so Google handles the "State" for you. |
 | **Legacy App (Saves to Disk)** | **Stateful** | **Compute Engine** | Only GCE supports Persistent Disks that stay attached to specific VMs. |
+| **Containerized DB / Kafka** | **Stateful** | **GKE (StatefulSet)** | The "Kubernetes way" to run stateful apps. Guarantees stable network IDs and storage. |
 | **Real-time Game Server** | **Stateful** | **Compute Engine** | Needs to keep the game state in RAM for players. |
 
 ## Summary

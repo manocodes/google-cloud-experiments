@@ -24,5 +24,5 @@ One of the most powerful features for the PCA exam is using **Cloud Audit Logs a
 
 ## 5. Exam Tips
 - Whenever you see **"respond to changes in [GCP Service X] that doesn't have a native trigger,"** the answer is likely **Eventarc via Audit Logs**.
-- Eventarc is the backbone of **Cloud Functions 2nd Gen**.
-- Use Eventarc to trigger **Workflows** for complex, multi-step orchestration.
+- **Cloud Functions Triggers**: In 2nd Gen Cloud Functions, "Eventarc" *is* the trigger mechanism. In 1st Gen, they were separate "Background Functions".
+- Use Eventarc to trigger **Workflows** for complex, multi-step orchestration (e.g., "When image uploaded -> Transcode -> Update DB -> Email User").

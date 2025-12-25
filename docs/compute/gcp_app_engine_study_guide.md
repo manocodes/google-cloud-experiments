@@ -37,6 +37,7 @@ This is the **most tested** comparison for GAE.
 | **VPC Access** | Via Serverless VPC Access connector. | Native access to VPC via Compute Engine. |
 | **Price** | Pay-per-request (mostly). | Pay for provisioned VM resources. |
 | **Best For** | Spiky traffic, cost-to-zero, fast startup. | Consistent traffic, custom OS dependencies. |
+| **Cold Start** | **Fast** (Milliseconds to Seconds). | **Slow** (Minutes - VM specific). |
 
 ### Custom Runtimes (The "Flex" Superpower)
 In GAE Flexible, you use a **Custom Runtime** by providing a `Dockerfile`.
@@ -55,6 +56,7 @@ In GAE Flexible, you use a **Custom Runtime** by providing a `Dockerfile`.
 *   **Public URL**: By default, every app gets a public `*.appspot.com` URL.
 *   **Identity-Aware Proxy (IAP)**: The primary way to restrict access to specific IAM users/groups without a VPN.
 *   **Ingress Settings**: You can set an app to "Internal Only" so it only accepts traffic from your VPC or a Load Balancer.
+*   **App Engine Firewall**: A dedicated firewall layer *specific* to App Engine. Use this to block IPs (like a DoS attack) before they hit your instances/billing. **Distinct from VPC Firewall Rules**.
 
 ### 3.2 URL Routing & Targeting
 App Engine URLs follow a strict hierarchy that allows you to target specific layers:

@@ -62,6 +62,7 @@ Filestore lives in a Google-managed VPC, so it must be "connected" to your VPC.
 *   **Booting:** You **CANNOT BOOT** a VM from Filestore. You boot from Persistent Disk, then *mount* Filestore.
 *   **Object Storage Replacement:** Don't use Filestore for "Data Lakes" or storing petabytes of user uploads. Use GCS (cheaper, infinite scale).
 *   **Transitive Peering:** If VM is in VPC A, and Filestore is in VPC B, and A is peered to B... it works. But if you have VPN -> A -> B, transitive routing issues might block access unless carefully configured with Custom Route Advertisement.
+*   **GKE Integration:** To use Filestore in GKE, use the **Filestore CSI Driver**. It allows you to create Persistent Volume Claims (PVCs) backed by Filestore automatically.
 
 ---
 

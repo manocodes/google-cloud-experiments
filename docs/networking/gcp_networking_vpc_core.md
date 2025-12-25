@@ -17,6 +17,9 @@ For the Professional Cloud Architect (PCA) exam, you must understand the "Global
 
 ### Project Relationship (1 Project : N VPCs)
 *   **Ownership**: A VPC "lives" inside a Google Cloud Project. It is a resource just like a VM.
+*   **Benefit**: Security admins verify rules once in the Host; Developers just deploy VMs in Service projects. Separation of Duties.
+*   **Caveat**: The Network Admin (Host Project) manages subnets/firewalls but *cannot* see/login to the VMs inside the Service Project unless explicitly granted Service Project permissions.
+*   **Private Service Connect (PSC)**: The modern alternative to Peering for consuming specific services. Prefer PSC for publishing internal APIs to other teams to avoid CIDR overlap issues.
 *   **Quotas**: By default, you can have **5 VPCs** per project (this is a soft limit, you can request more).
 *   **Isolation**: By default, a VPC in `Project A` cannot talk to a VPC in `Project B` (unless you use Peering or Shared VPC).
 

@@ -68,6 +68,8 @@ Choosing the right mode is a common exam scenario.
 | **Pricing** | Pay for Pod resources (CPU, Mem, Disk). | Pay for VM instances and management fee. |
 | **Control** | Opinionated, secure by default. | Full control over node configuration. |
 | **Use Case** | Most production workloads; "hands-off". | Specialized hardware (GPUs), specific kernels. |
+| **Availability** | **Regional** by default (Higher SLA). | Zonal or Regional. |
+| **Networking** | **VPC-Native** enforced. | VPC-Native optional (but recommended). |
 
 > **UI Tip**: If you don't see "GKE Standard" when creating a cluster, look for the **"SWITCH TO STANDARD CLUSTER"** button in the top-right corner of the Autopilot configuration page.
 
@@ -174,6 +176,8 @@ In Standard mode, you manage nodes via **Node Pools**. A node pool is a subset o
 - **Persistent Disk (PD)**: Standard block storage. Use **Regional PD** for high availability across zones.
 - **Filestore**: Managed NFS for applications requiring shared read/write access (RWX).
 - **Cloud Storage FUSE**: For massive scale / unstructured data access as a filesystem.
+- **Backup for GKE**: Fully managed service to backup and restore GKE workloads (including persistent volumes).
+    - *Exam Tip*: "Disaster recovery for Kubernetes state" -> **Backup for GKE**. comparison: Do not use generic snapshots if you need application-consistent backups.
 
 ---
 

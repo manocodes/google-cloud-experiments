@@ -23,7 +23,8 @@ Migration strategies are massive on the PCA exam. You need to distinguish betwee
     *   **Heterogeneous** data movement.
     *   Streaming real-time changes from Oracle/MySQL/PostgreSQL to **BigQuery** for analytics.
     *   Streaming data to **Cloud Storage** for data lake archival.
-    *   Replicating data to **Cloud Spanner**.
+    - Replicating data to **Cloud Spanner**.
+    - **Heterogeneous Migrations**: Oracle to PostgreSQL (AlloyDB/Cloud SQL) - often used when standard DMS doesn't cover complexity or custom transforms are needed.
 *   **Critical Info**:
     *   It reads the transaction logs (redo logs, binlogs) of the source database.
     *   It is often used in conjunction with **Dataflow** for transformation before landing in the destination.
@@ -37,6 +38,7 @@ Migration strategies are massive on the PCA exam. You need to distinguish betwee
 | **Source/Dest** | Homogeneous (MySQL->MySQL, PG->PG). | Heterogeneous (Oracle->BigQuery, MySQL->GCS). |
 | **Duration** | Temporary (runs until cutover). | Indefinite (runs continuously for pipelines). |
 | **Typical Target** | Cloud SQL, AlloyDB. | BigQuery, Cloud Storage, Spanner. |
+| **Logic** | Database-to-Database replication (Binlog). | Change Data Capture (CDC). |
 
 ## 4. Other Migration Tools (Context)
 *   **pg_dump / mysqldump**: Valid for small databases or where downtime is acceptable. Manual, harder to manage.

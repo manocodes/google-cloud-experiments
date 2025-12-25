@@ -30,7 +30,7 @@ A concise guide to Google Cloud's networking strategy: **Connect, Scale, Secure,
 *Visibility, troubleshooting, and cost/performance control.*
 
 *   **Network Intelligence Center**:
-    *   *Connectivity Tests*: Simulate traffic to verify firewall rules.
+    *   *Connectivity Tests*: Simulate traffic to verify firewall rules. **Exam Answer** for "Why can't VM A reach VM B?".
     *   *Network Topology*: Visualize traffic flow across your infrastructure.
 *   **Network Service Tiers**:
     *   *Premium*: Traffic rides Google's high-speed private backbone (faster, reliable).

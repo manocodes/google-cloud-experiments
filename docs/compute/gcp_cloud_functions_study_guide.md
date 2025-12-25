@@ -58,6 +58,9 @@ Functions are triggered by events. For PCA, know which service triggers what.
 - **Roles**:
   - `roles/cloudfunctions.invoker`: Required to call the function.
   - `roles/cloudfunctions.developer`: Required to create/edit functions.
+- **Secrets Management**:
+  - **Do NOT** store API keys in environment variables (they are visible in the console/logs).
+  - **Use Secret Manager**: Mount secrets as environment variables or volumes securely. Key exam pattern.
 
 ---
 

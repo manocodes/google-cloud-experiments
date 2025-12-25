@@ -113,6 +113,12 @@ The file you point to determines your security posture:
 | **Local Laptop** | `gcloud auth application-default login` | Uses your User Identity. No keys to manage. |
 | **GCP (Cloud Run/GCE)** | **Attached Service Account** | Metadata server handles rotation automatically. No files. |
 | **External (AWS/Azure)** | **Workload Identity Federation** | Uses ephemeral tokens. No long-lived secrets. |
+| **User (Local)** | **Impersonation** (`--impersonate-service-account`) | Better than keys. Acts as the SA for a session. |
+
+### Service Account Impersonation (The "Sudo" of Cloud)
+Instead of downloading a key for `my-app@project.iam`, you can grant your *User* (`alice@gmail.com`) the role `roles/iam.serviceAccountTokenCreator` on the Service Account.
+*   **Command**: `gcloud config set auth/impersonate_service_account my-app@project-id.iam.gserviceaccount.com`
+*   **Result**: All your local commands now run as the Service Account. No keys were downloaded. Secure and revocable.
 
 **Only use `GOOGLE_APPLICATION_CREDENTIALS` pointing to a SA Link when you absolutely have to (e.g. legacy on-prem apps with no OIDC provider).**
 

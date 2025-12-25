@@ -3,7 +3,7 @@
 ## 1. The "Big 3" Comparison Table
 This is the ultimate summary to decide which storage service to pick in the exam.
 
-| Feature | **Object Storage** (Cloud Storage) | **Block Storage** (Persistent Disk) | **File Storage** (Filestore) |
+| Feature | **Object Storage** (Cloud Storage) | **Block Storage** (Persistent Disk / Hyperdisk) | **File Storage** (Filestore) |
 | :--- | :--- | :--- | :--- |
 | **Data Type** | **Unstructured** (Blobs, Images, Backups). | **Structured** (Raw Blocks, Filesystem). | **Structured** (Files, Directories). |
 | **Protocol** | **HTTP/HTTPS** (REST API). | **Native Block Device** (NVMe/SCSI). | **NFSv3** (Network File System). |

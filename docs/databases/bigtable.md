@@ -13,12 +13,15 @@
   - Correct design prevents "hotspotting" (uneven distribution of traffic).
   - **Anti-patterns**: Domain names (front-heavy), Sequential IDs/Timestamps at start of key.
   - **Patterns**: Reverse domain names, Salting, Hashing, Field promotion.
+  - **Tool**: **Key Visualizer**. Essential tool to analyze usage patterns and find hotspots.
 - **Storage**: Separation of processing (nodes) and storage (Colossus). Resizing Cluster is fast (no data movement needed).
+- **Disk Type**: SSD (Standard choice, high performance) or HDD (Large archival data, rarely accessed, cheaper). Cannot start with HDD and switch to SSD later easily.
 
 ## Traps & "Gotchas"
 1. **Not for SQL**: No joins, no complex transactions, no secondary indexes (historically - barely supported now but avoid for exam logic, assume minimal indexing).
 2. **Cost**: Minimum node count (usually 1 or 3 for prod) makes it pricey for tiny datasets. Not for storing a "ToDo list" app.
-3. **Small Data**: Don't use Bigtable for < 1 TB of data unless you have extremly high throughput requirements. Use Firestore or SQL instead.
+3. **Hotspotting**: A monotonically increasing key (e.g., `Timestamp` at the START of the key) will write all new data to ONE single node. This is a disaster. DO NOT DO THIS.
+4. **Small Data**: Don't use Bigtable for < 1 TB of data unless you have extremely high throughput requirements. Use Firestore or SQL instead.
 
 ## Important Points / Exam Clues
 - Keywords: "Hadoop", "HBase", "IoT", "AdTech", "Timeseries", "Low Latency", "High Throughput", "Flat schema", "Wide-column".

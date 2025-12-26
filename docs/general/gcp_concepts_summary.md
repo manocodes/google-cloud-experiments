@@ -27,7 +27,6 @@ Roles define "What" a principal can do. They are collections of permissions.
 | **Predefined** | Google | Fine | Service-specific roles maintained by Google. Updates automatically when new features are added. | `Storage Object Viewer`, `Pub/Sub Editor` |
 | **Custom** | You | Precise | User-defined list of permissions. Must be manually maintained. | `My Custom Audit Role` |
 
-test
 ## 3. Cloud Shell vs. Cloud SDK
 The distinction lies between the *environment* and the *toolset*.
 

@@ -152,6 +152,9 @@ The exam tests if you know the **secure** way to connect diverse systems.
 *   **Storage Comparison**: [gcp_storage_comparison.md](./storage/gcp_storage_comparison.md) - The "Big 3" Comparison Table (Object vs Block vs File).
 *   **Data Transfer**: [gcp_data_transfer_pca_cram_sheet.md](./storage/gcp_data_transfer_pca_cram_sheet.md) - Decision matrix for gsutil vs STS vs Appliance.
 *   **Databases**: [gcp_databases_pca_cram_sheet.md](./databases/gcp_databases_pca_cram_sheet.md) - Deep dive into Cloud SQL, Spanner, AlloyDB, and BigQuery.
+*   **CAP Theorem**: [cap_theorem_pca.md](./databases/cap_theorem_pca.md) - Understanding Consistency, Availability, Partition Tolerance trade-offs in database selection.
 *   **Data Loss Prevention**: [gcp_dlp_pca_cram_sheet.md](./databases/gcp_dlp_pca_cram_sheet.md) - Deep dive into Cloud DLP for data classification and protection.
 *   **Colossus Infrastructure**: [google_colossus_infrastructure.md](./general/google_colossus_infrastructure.md) - Understanding Google's distributed file system that powers Cloud Storage, BigQuery, Bigtable, and more.
+*   **Design Principles**: [cloud_architecture_design_principles_pca.md](./general/cloud_architecture_design_principles_pca.md) - 12-Factor App, Well-Architected Framework, SRE principles (SLI/SLO/SLA), and microservices patterns.
+
 

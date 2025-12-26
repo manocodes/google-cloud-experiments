@@ -56,10 +56,36 @@ Google Cloud's native databases are **excellent for 80% of use cases**. But the 
 *   **Why Partner?**: Google Cloud has no native managed graph database. Neo4j is the industry standard.
 
 #### 2. **DataStax (Apache Cassandra)**
+
+**Cassandra vs DataStax - The Relationship**:
+- **Apache Cassandra**: The open-source database software (like MySQL or PostgreSQL).
+- **DataStax**: The company that provides **commercial support** and **managed services** for Cassandra.
+- **Analogy**: 
+    - Apache Cassandra = Linux (open-source OS)
+    - DataStax = Red Hat Enterprise Linux (commercial distribution with support)
+- **On Google Cloud**: When you deploy Cassandra from the Marketplace, you're using **DataStax Astra** or **DataStax Enterprise** (managed versions of Cassandra).
+
+*For the exam: "Cassandra" and "DataStax" are used interchangeably. If the exam mentions either, they mean the same thing.*
+
+---
+
+*   **What is Cassandra?**: Open-source, wide-column NoSQL database originally built by Facebook. Designed for **no single point of failure** and **multi-datacenter active-active writes**.
+*   **Data Model**: Similar to Bigtable (wide-column, key-value pairs organized in column families).
 *   **Native Alternative**: Bigtable (similar wide-column NoSQL).
+*   **Key Differentiator - CAP Theorem**:
+    *   **Cassandra**: Prioritizes **Availability + Partition Tolerance** (AP in CAP). Uses **eventual consistency** (tunable).
+    *   **Bigtable**: Prioritizes **Consistency + Partition Tolerance** (CP in CAP). Single-master writes (strong consistency).
 *   **Use Case**: When you need **multi-datacenter active-active writes** with tunable consistency (Cassandra's specialty).
-*   **Exam Keyword**: "Cassandra", "Multi-datacenter writes", "Tunable consistency" (AP vs CP in CAP theorem).
-*   **Why Partner?**: Bigtable is single-master for writes (read replicas exist but are async). Cassandra allows writes in multiple datacenters simultaneously with eventual consistency.
+    *   Example: Global e-commerce platform that needs to accept writes in US, EU, and Asia simultaneously, even if datacenters are temporarily disconnected.
+*   **Tunable Consistency**: You can configure per-query:
+    *   `QUORUM` (majority must respond) → stronger consistency.
+    *   `ONE` (any single replica responds) → higher availability, weaker consistency.
+*   **Exam Keyword**: "Cassandra", "Multi-datacenter writes", "Tunable consistency", "AP" (Available + Partition-tolerant), "Eventual Consistency".
+*   **Why Partner over Bigtable?**: 
+    *   Bigtable is single-master for writes (only one region accepts writes at a time; read replicas exist but are async). 
+    *   Cassandra allows **simultaneous writes** in multiple datacenters with conflict resolution.
+    *   If the exam says "Existing Cassandra cluster" or "Multi-region writes must not wait for cross-region replication" → **DataStax**.
+
 
 #### 3. **Elastic (Elasticsearch)**
 *   **Native Alternative**: BigQuery (for analytics), Firestore (for search), or Vertex AI Search.

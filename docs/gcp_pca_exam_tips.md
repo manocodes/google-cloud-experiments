@@ -130,7 +130,7 @@ The exam tests if you know the **secure** way to connect diverse systems.
 *   **The "Correct" Pattern (External/Multi-Cloud)**: Use **Workload Identity Federation**.
     *   *Scenario:* AWS EC2, Azure VM, or GitHub Actions needs to access BigQuery.
     *   *Action:* Configure a Workload Identity Pool. Exchange the AWS/Azure token for a short-lived Google token. **No JSON keys involved.**
-132.    *   **Exam Tip**: If you see "Download JSON key" as an option, it is 99% likely WRONG. Look for "Workload Identity Federation".
+    *   **Exam Tip**: If you see "Download JSON key" as an option, it is 99% likely WRONG. Look for "Workload Identity Federation".
 
 ### Debugging Access Issues
 *   **"Works on my machine, fails in prod"**: This is almost always an **ADC Identity Mismatch**.
@@ -143,18 +143,39 @@ The exam tests if you know the **secure** way to connect diverse systems.
     *   *Reason:* It allows you to add/remove team members without updating IAM policies on every project.
 
 
-## 9. Detailed Study Guides
-*   **Compute Engine**: [gcp_compute_engine_study_plan.md](./compute/gcp_compute_engine_study_plan.md) - Comprehensive deep dive into GCE, including machine types, MIGs, and storage options.
-*   **App Engine**: [gcp_app_engine_study_guide.md](./compute/gcp_app_engine_study_guide.md) - Deep dive into GAE Standard vs. Flexible and exam strategy.
-*   **Cloud Storage**: [gcp_storage_pca_cram_sheet.md](./storage/gcp_storage_pca_cram_sheet.md) - Cram sheet for Cloud Storage classes, locations, and consistency.
-*   **Block Storage**: [gcp_block_storage_pca_cram_sheet.md](./storage/gcp_block_storage_pca_cram_sheet.md) - Deep dive into Persistent Disk, Local SSD, and Filestore.
-*   **Filestore**: [gcp_filestore_pca_cram_sheet.md](./storage/gcp_filestore_pca_cram_sheet.md) - Managed NFS for shared filesystems and legacy apps.
-*   **Storage Comparison**: [gcp_storage_comparison.md](./storage/gcp_storage_comparison.md) - The "Big 3" Comparison Table (Object vs Block vs File).
-*   **Data Transfer**: [gcp_data_transfer_pca_cram_sheet.md](./storage/gcp_data_transfer_pca_cram_sheet.md) - Decision matrix for gsutil vs STS vs Appliance.
-*   **Databases**: [gcp_databases_pca_cram_sheet.md](./databases/gcp_databases_pca_cram_sheet.md) - Deep dive into Cloud SQL, Spanner, AlloyDB, and BigQuery.
-*   **CAP Theorem**: [cap_theorem_pca.md](./databases/cap_theorem_pca.md) - Understanding Consistency, Availability, Partition Tolerance trade-offs in database selection.
-*   **Data Loss Prevention**: [gcp_dlp_pca_cram_sheet.md](./databases/gcp_dlp_pca_cram_sheet.md) - Deep dive into Cloud DLP for data classification and protection.
-*   **Colossus Infrastructure**: [google_colossus_infrastructure.md](./general/google_colossus_infrastructure.md) - Understanding Google's distributed file system that powers Cloud Storage, BigQuery, Bigtable, and more.
-*   **Design Principles**: [cloud_architecture_design_principles_pca.md](./general/cloud_architecture_design_principles_pca.md) - 12-Factor App, Well-Architected Framework, SRE principles (SLI/SLO/SLA), and microservices patterns.
+## 9. Detailed Study Guides & Practice Tools
+
+### Compute & Architecture
+*   **Compute Engine**: [gcp_compute_engine_study_plan.md](./compute/gcp_compute_engine_study_plan.md) - Deep dive into machine types, MIGs, and storage.
+*   **App Engine**: [gcp_app_engine_study_guide.md](./compute/gcp_app_engine_study_guide.md) - Standard vs. Flexible trade-offs.
+*   **GKE**: [gcp_gke_study_guide.md](./compute/gcp_gke_study_guide.md) - Kubernetes on Google Cloud.
+*   **Cloud Functions**: [gcp_cloud_functions_study_guide.md](./compute/gcp_cloud_functions_study_guide.md) - Event-driven serverless.
+*   **Design Principles**: [cloud_architecture_design_principles_pca.md](./general/cloud_architecture_design_principles_pca.md) - 12-Factor App, Well-Architected Framework, SRE principles (SLI/SLO/SLA).
+*   **Multiplayer Game Architecture**: [multiplayer_game_multi_database_architecture.md](./architectures/multiplayer_game_multi_database_architecture.md) - A real-world example of Lambda Architecture with 4+ databases.
+
+### Databases & Data Analytics
+*   **Database Decision Guide**: [database_decision_guide.md](./databases/database_decision_guide.md) - Central tool for picking the right database.
+*   **BigQuery Deep Dive**: [bigquery.md](./databases/bigquery.md) - Slots, Colossus, Dremel, Editions, and Security.
+*   **Dataform**: [dataform.md](./databases/dataform.md) - SQL orchestration and dependency management.
+*   **Cloud Data Fusion**: [cloud_data_fusion.md](./databases/cloud_data_fusion.md) - No-code visual ETL.
+*   **Cloud Spanner**: [cloud_spanner.md](./databases/cloud_spanner.md) - Global ACID compliance.
+*   **Cloud Storage**: [gcp_storage_pca_cram_sheet.md](./storage/gcp_storage_pca_cram_sheet.md) - Classes, locations, and consistency.
+*   **Data Formats Reference**: [data_formats_reference_guide.md](./general/data_formats_reference_guide.md) - CSV, JSON, Avro, Parquet, and the "Fruit Stand" analogy.
+*   **Data Warehouse Comparison**: [data_warehouse_comparison_reference.md](./databases/data_warehouse_comparison_reference.md) - BigQuery vs. Snowflake vs. Redshift vs. Synapse.
+*   **CAP Theorem**: [cap_theorem_pca.md](./databases/cap_theorem_pca.md) - Consistency vs. Availability in the cloud.
+*   **Data Loss Prevention**: [gcp_dlp_pca_cram_sheet.md](./databases/gcp_dlp_pca_cram_sheet.md) - PII classification and protection.
+
+### Networking & Security
+*   **VPC Core**: [gcp_networking_vpc_core.md](./networking/gcp_networking_vpc_core.md) - Subnets, routes, and firewalls.
+*   **Load Balancing**: [gcp_networking_load_balancing.md](./networking/gcp_networking_load_balancing.md) - Global vs. Regional decision tree.
+*   **Hybrid Connectivity**: [gcp_networking_hybrid.md](./networking/gcp_networking_hybrid.md) - VPN vs. Interconnect.
+*   **Network Security**: [gcp_networking_security.md](./networking/gcp_networking_security.md) - Cloud Armor, IAP, and VPC Service Controls.
+*   **Workload Identity**: [adc_and_workload_identity.md](./security/adc_and_workload_identity.md) - Secure, keyless authentication.
+
+### Practice Exam Questions
+*   **Compute Practice Exam**: [pca_practice_questions_compute.md](./compute/pca_practice_questions_compute.md)
+*   **Storage Practice Exam**: [pca_practice_questions_storage.md](./storage/pca_practice_questions_storage.md)
+*   **Database Practice Exam**: [pca_practice_questions_databases.md](./databases/pca_practice_questions_databases.md)
+*   **Networking Practice Exam**: [pca_practice_questions_networking.md](./networking/pca_practice_questions_networking.md)
 
 

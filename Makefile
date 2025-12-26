@@ -19,7 +19,7 @@ install:
 	pip install -r requirements-dev.txt
 
 test:
-	pytest --cov=src tests/ -v
+	python -m pytest --cov=src tests/ -v
 
 test-watch:
 	pytest-watch
@@ -54,10 +54,10 @@ m ?= more updates
 
 # Handle positional arguments for gitupdate
 ifeq (gitupdate,$(firstword $(MAKECMDGOALS)))
-  # use the rest as arguments
+  # Capture everything after 'gitupdate' as the MESSAGE
   MESSAGE := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
-  # ...and turn them into do-nothing targets
-  $(eval $(MESSAGE):;@:)
+  # Create 'do-nothing' targets for each word to avoid the "No rule to make target" error
+  $(foreach target,$(MESSAGE),$(eval $(target):;@:))
 endif
 
 gitupdate:

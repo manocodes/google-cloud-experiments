@@ -59,7 +59,7 @@ You can add a "Condition" to a Role Binding. The role is only active if the cond
 Service Accounts (SAs) are identities for resources.
 
 1.  **One SA per Application/Function:** Don't share the default Compute Engine SA. Create a dedicated SA (e.g., `app-backend-sa`).
-2.  **No Keys (if possible):** As covered in the ADC guide, rely on attached identities.
+2.  **No Keys (if possible):** As covered in the Authentication guide, rely on attached identities.
 3.  **Scopes vs. IAM:**
     *   Legacy Access Scopes (Metadata) exist on VMs.
     *   **Rule:** Set Access Scopes to `Allow Full Access to all Cloud APIs` and manage permissions strictly via **IAM Roles**. This decouples the network authorization from the identity authorization.

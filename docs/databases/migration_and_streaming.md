@@ -40,7 +40,19 @@ Migration strategies are massive on the PCA exam. You need to distinguish betwee
 | **Typical Target** | Cloud SQL, AlloyDB. | BigQuery, Cloud Storage, Spanner. |
 | **Logic** | Database-to-Database replication (Binlog). | Change Data Capture (CDC). |
 
-## 4. Other Migration Tools (Context)
+## 4. Special Strategy: MongoDB Migration
+*   **Scenario**: User has a MongoDB database and wants to move to GCP.
+*   **Path A: Refactor (Cloud Native)**
+    *   **Target**: **Cloud Firestore** (or Bigtable if massive).
+    *   **Cost**: High engineering effort (rewrite code).
+    *   **Benefit**: Serverless, native integration.
+*   **Path B: Lift & Shift (Minimize Effort)**
+    *   **Target**: **MongoDB Atlas** (via Google Cloud Marketplace).
+    *   **Cost**: License/Managed Service cost.
+    *   **Benefit**: Zero code changes. 100% API compatibility.
+    *   *Exam Tip*: If the question says "No Code Changes", choose **Atlas**.
+
+## 5. Other Migration Tools (Context)
 *   **pg_dump / mysqldump**: Valid for small databases or where downtime is acceptable. Manual, harder to manage.
 *   **BigQuery Data Transfer Service**: Specifically for moving data *into* BigQuery (from SaaS apps like Google Ads, or other cloud warehouses like Redshift/Teradata).
 *   **Transfer Appliance**: For physically moving petabytes of data (too big for network).

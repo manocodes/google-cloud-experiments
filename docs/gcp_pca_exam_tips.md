@@ -153,4 +153,5 @@ The exam tests if you know the **secure** way to connect diverse systems.
 *   **Data Transfer**: [gcp_data_transfer_pca_cram_sheet.md](./storage/gcp_data_transfer_pca_cram_sheet.md) - Decision matrix for gsutil vs STS vs Appliance.
 *   **Databases**: [gcp_databases_pca_cram_sheet.md](./databases/gcp_databases_pca_cram_sheet.md) - Deep dive into Cloud SQL, Spanner, AlloyDB, and BigQuery.
 *   **Data Loss Prevention**: [gcp_dlp_pca_cram_sheet.md](./databases/gcp_dlp_pca_cram_sheet.md) - Deep dive into Cloud DLP for data classification and protection.
+*   **Colossus Infrastructure**: [google_colossus_infrastructure.md](./general/google_colossus_infrastructure.md) - Understanding Google's distributed file system that powers Cloud Storage, BigQuery, Bigtable, and more.
 

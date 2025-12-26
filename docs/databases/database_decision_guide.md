@@ -40,6 +40,66 @@ This guide simplifies the decision-making process for choosing a database servic
 -   **"Global User Base"**: If read-heavy, Cloud SQL + Read Replicas *might* work. If write-heavy everywhere, **Spanner**.
 -   **"JSON"**: Firestore is the default "JSON" store. BigQuery also handles JSON natively now, but for analytics.
 
+## Partner & Specialized Database Solutions
+
+Google Cloud's native databases are **excellent for 80% of use cases**. But the PCA exam tests whether you know when to recommend a **specialized tool** for the remaining 20%.
+
+### The Strategic Rule
+> "If the use case explicitly requires a specialized capability that no native GCP database offers, the answer is a **Marketplace Partner Solution**."
+
+### Common Specialized Database Partners
+
+#### 1. **Neo4j** (Graph Database)
+*   **Native Alternative**: None. (Spanner has *some* graph-like queries, but it's not a true graph DB).
+*   **Use Case**: Social networks ("Friends of Friends"), Fraud detection (relationship patterns), Knowledge graphs, Recommendation engines.
+*   **Exam Keyword**: "Graph", "Relationships", "Traversal", "Shortest Path".
+*   **Why Partner?**: Google Cloud has no native managed graph database. Neo4j is the industry standard.
+
+#### 2. **DataStax (Apache Cassandra)**
+*   **Native Alternative**: Bigtable (similar wide-column NoSQL).
+*   **Use Case**: When you need **multi-datacenter active-active writes** with tunable consistency (Cassandra's specialty).
+*   **Exam Keyword**: "Cassandra", "Multi-datacenter writes", "Tunable consistency" (AP vs CP in CAP theorem).
+*   **Why Partner?**: Bigtable is single-master for writes (read replicas exist but are async). Cassandra allows writes in multiple datacenters simultaneously with eventual consistency.
+
+#### 3. **Elastic (Elasticsearch)**
+*   **Native Alternative**: BigQuery (for analytics), Firestore (for search), or Vertex AI Search.
+*   **Use Case**: Full-text search, Log analytics (ELK stack), Real-time search with fuzzy matching.
+*   **Exam Keyword**: "Elasticsearch", "ELK Stack", "Kibana", "Full-text search".
+*   **Why Partner?**: If the requirement says "Existing Elasticsearch stack" or "Advanced search ranking algorithms", use Elastic Cloud on GCP.
+
+#### 4. **MongoDB Atlas**
+*   **Native Alternative**: Firestore.
+*   **Use Case**: Existing MongoDB application, "No code changes" constraint.
+*   **Exam Keyword**: "MongoDB", "Document DB", "No refactoring".
+*   **Why Partner?**: 100% API compatibility.
+
+#### 5. **Redis Enterprise (vs Memorystore)**
+*   **Native Alternative**: Memorystore for Redis.
+*   **Use Case**: When you need Redis features that Memorystore doesn't support (e.g., Active-Active Geo-Distribution, RedisJSON, RedisGraph).
+*   **Exam Keyword**: "Advanced Redis Modules", "Multi-region Redis writes".
+*   **Why Partner?**: Memorystore for Redis is excellent but doesn't support all Redis modules or active-active writes across regions.
+
+#### 6. **InfluxDB**
+*   **Native Alternative**: Bigtable (can store time-series but requires custom schema design).
+*   **Use Case**: Specialized time-series database with built-in downsampling, retention policies.
+*   **Exam Keyword**: "Time-series", "Metrics", "InfluxDB".
+*   **Why Partner?**: If the scenario says "Existing InfluxDB" or requires specific InfluxQL features.
+
+---
+
+### Exam Decision Framework
+```
+Does the requirement mention a SPECIFIC technology by name (e.g., "Neo4j", "Cassandra")?
+├─ YES: Use the Marketplace Partner version.
+└─ NO: Does the use case require a specialized capability?
+    ├─ Graph Relationships → Neo4j
+    ├─ Multi-DC Active Writes (NoSQL) → DataStax
+    ├─ Advanced Full-Text Search → Elastic
+    └─ Everything Else → Default to Google Native (Spanner/Bigtable/Firestore/BigQuery)
+```
+
+---
+
 ## Key Performance Terminology for Exam
 
 Understanding these metrics is vital for choosing between Cloud SQL, Spanner, and Bigtable.

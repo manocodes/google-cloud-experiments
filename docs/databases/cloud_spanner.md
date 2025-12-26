@@ -7,7 +7,6 @@
 - **Scaling**: 
   - **Horizontal**: Scales writes and reads by adding nodes. Unlimited scaling.
 - **Consistency**: Strong consistency (External Consistency) globally using TrueTime API (keeping clocks synchronized via GPS/Atomic clocks).
-- **Consistency**: Strong consistency (External Consistency) globally using TrueTime API (keeping clocks synchronized via GPS/Atomic clocks).
 
 ## What does "Global" Mean?
 When we say Spanner is "Global", we don't just mean it lives in many places. We mean:
@@ -59,8 +58,37 @@ Unlocking "Global" capabilities is a configuration choice, not a mandate. You ca
 
 ## Important Points / Exam Clues
 - Keywords: "Global", "Strong Consistency", "Horizontal Write Scaling", "Financial", "Scale beyond Cloud SQL", "Multiple regions active-active".
-- **TrueTime**: The secret sauce enabling strong global consistency.
 - **Federated Queries**: Can seek data in Spanner via BigQuery.
+
+## How Spanner Achieves Global Strong Consistency
+*You don't need algorithm details, but understanding the high-level "how" helps you answer "why" questions.*
+
+### 1. TrueTime API
+- **What it is**: Google's distributed time API that provides **globally synchronized timestamps**.
+- **How it works**: Uses GPS receivers and atomic clocks in every datacenter to keep clocks synchronized to within microseconds.
+- **Why it matters**: Traditional distributed databases can't agree on "what happened first" across continents because clocks drift. TrueTime solves this.
+- **Exam Relevance**: This is why Spanner can guarantee **External Consistency** (if Transaction A finishes before Transaction B starts, globally, B will see A's writes).
+
+### 2. Paxos Consensus Algorithm
+- **What it is**: Google's distributed consensus algorithm used for replication.
+- **What it does**: Ensures multiple replicas of data "agree" on a value even when some replicas are slow or fail.
+- **How it works (High-Level)**:
+    1. A write operation proposes a value to all replicas.
+    2. A **majority (quorum)** of replicas must agree before the write is committed.
+    3. Example: With 5 replicas, at least 3 must agree (can survive 2 failures).
+- **Why it matters**: Enables Spanner to:
+    - Survive datacenter failures without data loss.
+    - Provide strong consistency (not eventual consistency like Cassandra).
+- **Exam Relevance**: If the question asks "How does Spanner handle replica failures?", the answer involves Paxos quorum-based replication.
+
+### Combined Power: TrueTime + Paxos
+```
+TrueTime: "This write happened at exactly 2025-12-25 11:15:32.123456 UTC globally"
+Paxos: "3 out of 5 replicas have committed this write, it's durable"
+= Strong Global Consistency
+```
+
+**One-Sentence Summary**: TrueTime provides global timestamps, Paxos ensures majority agreement, together they enable globally consistent ACID transactions.
 
 ## Tips
 - If the requirement says "Relational" AND "Global" -> **Spanner**.

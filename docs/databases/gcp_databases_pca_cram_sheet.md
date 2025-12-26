@@ -24,6 +24,10 @@ This sheet acts as the central hub for your database study. It summarizes the ke
 | **"Cache", "Session Store", "Sub-millisecond"** | **Memorystore** | Standard caching layer. |
 | **"Analytics", "Warehouse", "History", "Business Intelligence"** | **BigQuery** | OLAP engine. |
 | **"Oracle Migration", "Strict Latency"** | **Bare Metal Solution** | If you can't refactor. |
+| **"MongoDB", "No Code Changes", "Marketplace"** | **MongoDB Atlas** | Managed Partner solution. |
+| **"Graph", "Relationships", "Neo4j"** | **Neo4j** | The only managed graph database option. |
+| **"Cassandra", "Multi-DC Writes"** | **DataStax (Cassandra)** | Active-active writes across datacenters. |
+| **"Elasticsearch", "ELK", "Full-text Search"** | **Elastic Cloud** | Advanced search capabilities. |
 
 ## ⚙️ Migration Patterns
 

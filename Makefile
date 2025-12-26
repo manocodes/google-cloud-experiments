@@ -1,4 +1,4 @@
-.PHONY: help setup install test lint format clean run updategit
+.PHONY: help setup install test lint format clean run gitupdate
 
 help:
 	@echo "Available commands:"
@@ -9,7 +9,7 @@ help:
 	@echo "  make format   - Format code with black"
 	@echo "  make clean    - Clean up temporary files"
 	@echo "  make run      - Run a specific experiment (usage: make run FILE=storage_example.py)"
-	@echo "  make updategit m='msg' - Add, commit, and push changes (default m='more updates')"
+	@echo "  make gitupdate [msg]   - Add, commit, and push changes. Can use m='msg' or just 'msg' after command."
 
 setup:
 	@bash scripts/setup.sh
@@ -52,10 +52,22 @@ run:
 
 m ?= more updates
 
+# Handle positional arguments for gitupdate
+ifeq (gitupdate,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments
+  MESSAGE := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(MESSAGE):;@:)
+endif
+
 gitupdate:
 	@if [ -n "$$(git status --porcelain)" ]; then \
 		git add .; \
-		git commit -m "$(m)"; \
+		if [ -n "$(MESSAGE)" ]; then \
+			git commit -m "$(MESSAGE)"; \
+		else \
+			git commit -m "$(m)"; \
+		fi; \
 		git push origin main; \
 	else \
 		echo "Nothing to commit, working tree clean"; \

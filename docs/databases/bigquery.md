@@ -48,9 +48,84 @@ BigQuery chops the database in half with a machete.
   - **Capacity (Editions)**: Pay for slot duration (Standard/Enterprise/Enterprise Plus). Requires reservation.
   - **Autoscaling**: Slots can autoscale to handle spikes.
 - **Caching**: Queries are cached per user. If the same query runs again (and data hasn't changed), the result is free/instant.
-- **BI Engine**: An in-memory analysis service. Sits "on top" of BigQuery. Makes dashboards (Looker, Data Studio) fly with sub-second response times.
+- **BI Engine**: An in-memory analysis service. Sits "on top" of BigQuery. Makes dashboards (Looker, Data Studio) fly with **sub-second response times** by caching table data in RAM.
+- **Data Transfer Service (DTS)**: Automated, managed service to "pull" data from Google SaaS (AdWords, YouTube), AWS S3, or cross-project BigQuery transfers on a schedule.
 
-## 5. Traps & "Gotchas"
+---
+
+## 5. Security & Governance (Mission Critical)
+*Common "Who gets access?" exam scenarios*
+
+### 1. Data Sharing (Least Privilege)
+- **Authorized Views:** Give a user access to a "View" (virtual table) that filters out sensitive data. The user **does not** need access to the raw table.
+- **Authorized Functions:** Similar to views, but shares results of a SQL function without exposing raw data.
+
+### 2. Fine-Grained Auditing
+- **Row-level Security:** Filters which rows a user can see based on SQL conditions (e.g., `WHERE region = 'US'`).
+- **Column-level Security:** Uses **Policy Tags** (Dataplex) to mask or block specific columns (e.g., `SSN`).
+
+### 3. BigLake
+- Provides a unified interface for data lakes (GCS) and warehouses (BQ).
+- Allows you to apply **BigQuery-level security** (Row/Column) to files sitting in Cloud Storage (Parquet, Avro, etc.).
+
+---
+
+## 5. Slot Management: "On-Demand" vs. "Reservations"
+*This is the core of your architectural control.*
+
+### Path A: On-Demand (Default)
+- **Concept:** You don't manage anything. You pay for "Bytes Scanned" (typically $6.25/TB).
+- **Control:** None. BigQuery gives you a maximum soft limit of **2,000 slots** across your whole project.
+- **Simultaneous Usage:** If two people run massive queries, they "fight" for those 2,000 slots. You cannot prioritize one over the other. 
+- **The PCA Answer:** Choose this for **variable, unpredictable workloads** or when you want **zero management**.
+
+### Path B: BigQuery Editions (Slot Management)
+If you want to **manage** slots, you must use **Reservations** (available in **Enterprise** and **Enterprise Plus** editions).
+
+1.  **Reservations:** You "buy" a dedicated pool of slots (e.g., 2,000 slots).
+2.  **Assignments:** You divide that pool into smaller pieces (Reservations) and assign them to specific projects, folders, or departments.
+    - *Example:* "Reserve 1,500 slots for 'Production' and 500 for 'Dev'."
+3.  **Noisy Neighbors:** This prevents a developer's accidental `SELECT *` from slowing down your critical production dashboards.
+4.  **Idle Slots:** If the 'Dev' reservation isn't being used, those 500 slots aren't wasted—they are "borrowed" by 'Production' automatically until 'Dev' needs them again.
+
+### BigQuery Editions Comparison
+| Feature | **Standard** | **Enterprise** | **Enterprise Plus** |
+| :--- | :--- | :--- | :--- |
+| **Pricing** | Pay-as-you-go slots | Dedicated/Autoscale slots | Dedicated/Autoscale slots |
+| **Reservations** | ❌ None | ✅ Yes (Management!) | ✅ Yes (Management!) |
+| **SLA** | 99.9% | 99.99% | 99.99% |
+| **Security**| Basic | ✅ VPC SC, CMEK | ✅ Column/Row security |
+| **Data Governance** | No | ✅ Dataplex | ✅ Advanced Governance |
+
+---
+
+## 6. Data Ingestion Best Practices
+*How to get data into BigQuery effectively*
+
+### 1. The Standard Path: GCS → BigQuery
+- **Recommended for:** Large files, production pipelines, scheduled loads.
+- **Benefit:** Reliable (resumable), high-speed (Google internal network), data staging (raw file audit).
+- **Tool:** Use `bq load` or **Data Transfer Service (DTS)**.
+
+### 2. Streaming Ingestion
+- **Recommended for:** Real-time analytics, dashboards that need immediate data.
+- **Technology:** BigQuery Storage Write API (replaces legacy Streaming API).
+- **Note:** Incurs an ingestion cost ($0.05/GB). Data is queryable in seconds.
+
+### 3. External Tables (Federated Queries)
+- **Recommended for:** Querying data "in-place" without loading it. 
+- **Sources:** Cloud Storage (CSV, Parquet), Bigtable, Google Drive, Spanner.
+- **Pros:** No storage cost in BQ; instant access.
+- **Cons:** Slower query performance than native BigQuery tables.
+
+### 4. Direct Upload (Console)
+- **Limit:** **10MB per file**. 
+- **Note:** Use only for tiny one-off tests. Not for production.
+
+---
+
+## 7. Traps & "Gotchas"
+
 1. **Not a Transactional Store**: BQ is OLAP (Online Analytical Processing), not OLTP. Do not use for "web app backend" serving low-latency point lookups or frequent single-row updates (streaming inserts exist but are for ingestion, not typical DB CRUD).
 2. **SELECT * **: Deadly for cost! BQ charges by *columns read*. Selecting all columns parses the full table. **ALWAYS** select only needed columns.
 3. **Partitioning & Clustering**: Use these to prune usage.
@@ -63,6 +138,7 @@ BigQuery chops the database in half with a machete.
 - Keywords: "Data Warehouse", "SQL Analytics", "Petabyte scale", "Serverless", "Looker", "BI".
 - **BigQuery ML**: Create ML models directly using SQL (`CREATE MODEL`). Good for "Democratizing ML" or "Analyst team needs ML".
 - **BigQuery Omni**: Analyze data across GCP, AWS, and Azure (Anthos under the hood, but transparent).
+- **Connected Sheets**: Use Google Sheets to query billions of rows in BigQuery without needing to know SQL or move data.
 - **External Tables**: Query data directly in GCS, Bigtable, Drive without importing. (Federated queries).
 - **Materialized Views**: Pre-compute complex queries. BQ automatically uses them to speed up related queries and save costs. Zero maintenance (auto-refresh).
 

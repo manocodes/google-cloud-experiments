@@ -52,7 +52,7 @@ run:
 
 m ?= more updates
 
-updategit:
+git:
 	@if [ -n "$$(git status --porcelain)" ]; then \
 		git add .; \
 		git commit -m "$(m)"; \

@@ -142,7 +142,26 @@ If you want to **manage** slots, you must use **Reservations** (available in **E
 - **External Tables**: Query data directly in GCS, Bigtable, Drive without importing. (Federated queries).
 - **Materialized Views**: Pre-compute complex queries. BQ automatically uses them to speed up related queries and save costs. Zero maintenance (auto-refresh).
 
-## 7. Tips
+---
+
+## 8. Cross-Organization Sharing: Analytics Hub
+*How to share data without copying it*
+
+### 1. Data Exchanges
+- **What:** A private or public "portal" for discovering datasets.
+- **Logic:** Providers publish "listings"; Consumers subscribe to them.
+- **Key Benefit**: Centralized discovery. No manual IAM management for every user; you manage access at the Exchange level.
+- **Where to find it (BigQuery Studio)**: Left-hand navigation -> **Analytics Hub** -> **Search Listings**.
+
+### 2. Data Clean Rooms (Privacy-Safe)
+- **What:** A secure environment for multi-party collaboration.
+- **Logic:** Allows joining two datasets (e.g., Brand + Retailer) **without** either party seeing the other's raw data.
+- **Privacy Policy:** Enforces "Aggregation Thresholds"—results are only shown if they represent a large enough group (e.g., >50 people) to prevent identifying individuals.
+- **PCA Exam Answer:** Choose this for **"Privacy-compliant collaboration between third parties."**
+
+---
+
+## 9. Tips
 - Requirement: "Analyze historical data" -> **BigQuery**.
 - Requirement: "Cost-effective storage of logs for regulatory analysis" -> **BigQuery** (Long-term storage pricing is cheap).
 - Requirement: "Ad-hoc SQL queries on petabytes" -> **BigQuery**.

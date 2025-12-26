@@ -428,6 +428,190 @@ D. Use BigQuery (supports JSON natively)
   - Not designed for transactional workloads.
   You don't run a web app's backend on BigQuery.
 
+### Question 13: Memorystore Scaling
+
+**Scenario**: A high-traffic social media application uses Memorystore for Redis as a session cache. The dataset has grown to 450 GB, and the current instance is experiencing performance degradation and memory pressure.
+
+**What is the most architectural appropriate solution?**
+
+A. Upgrade the instance to the largest possible Basic Tier machine  
+B. Migrate to Memorystore for Redis Cluster  
+C. Use Cloud Bigtable for session management  
+D. Use Memorystore for Memcached for better vertical scaling  
+
+**Answer: B** ✅
+
+**Explanations**:
+- **A (Wrong)**: Standalone Memorystore for Redis has a maximum capacity of **300 GB**. Since the dataset is already at 450 GB, vertical scaling is no longer an option.
+- **B (Correct)**: ✅ Memorystore for **Redis Cluster** supports horizontal scaling (sharding) and can scale up to **5 TB**. This is the standard choice when a Redis dataset exceeds the 300 GB limit of a standalone instance. It also provides better performance through parallel processing across shards.
+- **C (Wrong)**: While Bigtable can store large amounts of data, it is not an in-memory database and has higher latency (~10ms) compared to Redis (<1ms). Session management requires the ultra-low latency that only in-memory stores provide.
+- **D (Wrong)**: Memcached is excellent for simple key-value pairs, but it also has a 300 GB limit per node for Memorystore's managed offering. It lacks the advanced data structures (like Hashes or Sets) typically used for complex session data in Redis.
+
+---
+
+### Question 14: BigQuery SQL Orchestration (Dataform)
+
+**Scenario**: A data engineering team is managing hundreds of interconnected SQL scripts in BigQuery. They are struggling with manual execution orders, lack of code versioning, and frequent "bad data" reaching dashboards due to missing validation checks.
+
+**Which Google-native tool should they implement?**
+
+A. Cloud Data Fusion  
+B. Dataform  
+C. Cloud Composer (Airflow)  
+D. BigQuery Scheduled Queries  
+
+**Answer: B** ✅
+
+**Explanations**:
+- **A (Wrong)**: Data Fusion is a visual, no-code ETL tool. While it can manage pipelines, the scenario specifically mentions team is already writing SQL scripts and needs versioning. Dataform is better suited for a "SQL-first" engineering team.
+- **B (Correct)**: ✅ **Dataform** is the correct answer because:
+  1. It is **Git-native** (solves the versioning problem).
+  2. It automatically builds a **Dependency Graph (DAG)** (solves the manual execution order).
+  3. It includes **Assertions** (solves the "bad data" validation problem).
+  4. It uses **SQLX**, allowing for dynamic table references and code reuse.
+- **C (Wrong)**: Cloud Composer is a general-purpose orchestrator. While it *could* run these scripts, it requires writing Python DAGs and is managed infrastructure. Dataform is serverless and specifically optimized for BigQuery transformations.
+- **D (Wrong)**: Scheduled queries are basic. They don't support complex dependencies, data quality checks, or proper version control through Git.
+
+---
+
+### Question 15: BigQuery Slot Management
+
+**Scenario**: A company's "Executive Dashboard" in BigQuery often fails to load or runs slowly during the end-of-month financial close because the Data Science team is running massive ad-hoc training jobs in the same project.
+
+**How should you solve this "noisy neighbor" problem?**
+
+A. Move to BigQuery Flat-rate pricing and increase the project's slot limit to 5000  
+B. Use BigQuery Reservations to create a dedicated slot pool for the Dashboards  
+C. Partition the tables used by the Data Science team  
+D. Enable BI Engine for all Data Science datasets  
+
+**Answer: B** ✅
+
+**Explanations**:
+- **A (Wrong)**: Simply increasing the limit doesn't prevent competition. Both teams would still "fight" for the shared pool of 5000 slots. The ad-hoc jobs could still consume all available capacity.
+- **B (Correct)**: ✅ **BigQuery Reservations** (available in Enterprise/Enterprise Plus editions) allow you to:
+  1. Buy a pool of slots.
+  2. Divide that pool into **Reservations** (e.g., "Finance_Res" with 500 slots, "DS_Res" with 2000 slots).
+  3. Assign projects or folders to those reservations. 
+  This ensures the Executives always have dedicated compute power that cannot be "stolen" by other teams.
+- **C (Wrong)**: Partitioning helps with query efficiency (bytes scanned), but it doesn't solve compute (slot) contention. Even with partitioned tables, a massive scan can still consume all available slots.
+- **D (Wrong)**: BI Engine is for accelerating small-result dashboard lookups. It won't help with "massive ad-hoc training jobs" and doesn't solve compute resource isolation.
+
+---
+
+### Question 16: ETL Tool Selection (Data Fusion vs Dataflow)
+
+**Scenario**: An organization needs to build a new ETL pipeline to move data from an on-premises Oracle database to BigQuery. The data team consists primarily of SQL analysts who have no experience with Java or Python. They need to see the "Data Lineage" of all transformations for compliance reasons.
+
+**Which tool should an architect recommend?**
+
+A. Cloud Dataflow  
+B. Cloud Data Fusion  
+C. Cloud Dataproc  
+D. BigQuery Data Transfer Service  
+
+**Answer: B** ✅
+
+**Explanations**:
+- **A (Wrong)**: Dataflow requires writing code in Java, Python, or Go using the Apache Beam SDK. The team's lack of coding experience makes this a poor choice.
+- **B (Correct)**: ✅ **Cloud Data Fusion** is ideal here because:
+  1. It has a **Visual GUI** (No-code) that fits the SQL analysts' skill set.
+  2. It contains built-in features for **Data Lineage** (a specific requirement).
+  3. It has pre-built connectors for legacy systems like Oracle.
+- **C (Wrong)**: Dataproc is for Hadoop/Spark. Use this only if they are migrating existing Spark jobs. Writing new Spark jobs requires Scala/Python coding.
+- **D (Wrong)**: DTS is a "pull" service for specific SaaS/Cloud sources. While it supports some third-party databases, it doesn't provide the complex transformation capabilities or visual data lineage tracking required here.
+
+---
+
+### Question 17: Privacy-Safe Data Collaboration
+
+**Scenario**: A major airline and a credit card company want to analyze their shared customers to offer a "Double Points" promotion. Due to strict privacy regulations, neither company is allowed to see the other company's PII (emails, names, or addresses) or individual transaction lists. They only need to see aggregate totals of shared customers.
+
+**What BigQuery feature should they use?**
+
+A. Authorized Views  
+B. BigQuery Analytics Hub: Data Exchanges  
+C. BigQuery Data Clean Rooms  
+D. IAM-based dataset sharing  
+
+**Answer: C** ✅
+
+**Explanations**:
+- **A (Wrong)**: Authorized views allow sharing filtered data, but the consumer still sees the raw rows returned by the view. This doesn't prevent one party from seeing another's PII if the query joins on sensitive fields.
+- **B (Wrong)**: Data Exchanges are for **finding and subscribing** to data. Once subscribed, you generally have full read access to the shared dataset. It doesn't enforce the "neither party can see raw data" privacy requirement.
+- **C (Correct)**: ✅ **BigQuery Data Clean Rooms** are designed exactly for this:
+  1. Multiple parties contribute data to a neutral environment.
+  2. Parties can run queries that join the data.
+  3. **Privacy Policies** enforce aggregation thresholds (e.g., results must contain at least 50 users) and prevent any party from seeing the other's raw rows.
+- **D (Wrong)**: Basic IAM sharing gives full access to the shared rows. This is the least secure option for this privacy-critical scenario.
+
+---
+
+### Question 18: File Formats for BigQuery Ingestion
+
+**Scenario**: A company is designing a high-scale data ingestion pipeline. They need to move petabytes of data from Cloud Storage into BigQuery on a daily basis. They are deciding between CSV, JSON, and Avro for the "Raw Landing Zone."
+
+**Which format should they choose for the best ingestion performance and reliability?**
+
+A. Compressed JSON (Gzip)  
+B. CSV with headers  
+C. Avro  
+D. Parquet  
+
+**Answer: C** ✅
+
+**Explanations**:
+- **A (Wrong)**: JSON is human-readable but very slow to parse. Compressed (Gzip) files cannot be read in parallel by BigQuery (one worker must decompress the whole file). This is bad for petabyte-scale ingestion.
+- **B (Wrong)**: CSV is fast to read but flaky. If a single column contains a comma that isn't escaped correctly, the whole load can fail or data can be corrupted. It also doesn't contain data types.
+- **C (Correct)**: ✅ **Avro** is the best choice for **ingestion** because:
+  1. It is **Binary** (fast to read).
+  2. It is **Row-based** (making it easy to append new events).
+  3. It contains the **Schema in the header** (prevents "schema-on-read" errors).
+  4. It is **Splittable** (BigQuery can use many slots to read different parts of the same file simultaneously, even if compressed).
+- **D (Wrong)**: Parquet is the best for **Analytical Queries** (Columnar), but Avro is traditionally the preferred format for the **Ingestion/Write** phase of a pipeline because row-based binary formats are easier to produce and validate at high velocity.
+
+---
+
+### Question 19: Dashboard Performance Optimization
+
+**Scenario**: A global retail brand has a Looker dashboard that queries a 500 GB "Sales" table in BigQuery. The dashboard is slow, taking 8-10 seconds to load each tile. The underlying data only changes once an hour.
+
+**What is the most cost-effective way to achieve sub-second response times for these dashboard users?**
+
+A. Increase the BigQuery slot reservation count  
+B. Enable BigQuery BI Engine with memory reservation  
+C. Cluster the table by `store_id` and `date`  
+D. Migrate the table to Memorystore for Redis  
+
+**Answer: B** ✅
+
+**Explanations**:
+- **A (Wrong)**: Adding more slots makes the engine work faster, but it still has to scan the disk for every query. This rarely achieves "sub-second" performance for complex dashboard tiles and is more expensive.
+- **B (Correct)**: ✅ **BI Engine** is an in-memory analysis service. It caches the relevant table data in RAM. When a dashboard user refreshes a tile, BigQuery reads from memory instead of disk, resulting in **sub-second** latency. It is much cheaper than buying thousands of slots.
+- **C (Wrong)**: Clustering helps "prune" data (reading less disk), which reduces cost and improves speed, but it typically gets performance down to the 2-3 second range, not sub-second "instant" feel.
+- **D (Wrong)**: BigQuery is a data warehouse; Memorystore is a cache. Moving 500 GB to Memorystore would be extremely expensive (~$30/GB/month) and would require rewriting all the dashboard's SQL to point at a completely different system.
+
+---
+
+### Question 20: Security for Hybrid Data Lakes
+
+**Scenario**: A financial services company stores petabytes of historical transaction files in Cloud Storage (Iceberg and Parquet formats). They want to allow analysts to query this data using SQL in BigQuery, but they need to enforce **Row-level security** so that analysts only see transactions from their authorized region.
+
+**Which technology enables this?**
+
+A. BigQuery Omni  
+B. BigLake  
+C. Cloud DLP API  
+D. Storage Transfer Service  
+
+**Answer: B** ✅
+
+**Explanations**:
+- **A (Wrong)**: BigQuery Omni is for querying data across AWS S3 or Azure Blob Storage. It is for **multi-cloud**, not for adding security to GCS files.
+- **B (Correct)**: ✅ **BigLake** bridges the gap between GCS (Data Lake) and BigQuery. It allows you to create tables on top of files (like Parquet/Iceberg) and apply **BigQuery-level security** (Row-level and Column-level) to them. Without BigLake, GCS security is "all or nothing" at the bucket/object level.
+- **C (Wrong)**: Cloud DLP is for **finding** sensitive data (like masking SSNs). It doesn't enforce database-style row-level access control based on user attributes.
+- **D (Wrong)**: Storage Transfer Service is for moving data between buckets/clouds. It has no security enforcement or SQL capabilities.
+
 ---
 
 ## Answer Key Summary
@@ -444,6 +628,14 @@ D. Use BigQuery (supports JSON natively)
 10. **B** - Cassandra (AP for social media)
 11. **B** - Datastream (Oracle CDC → BigQuery)
 12. **B** - MongoDB Atlas (lift and shift)
+13. **B** - Memorystore Redis Cluster (>300GB)
+14. **B** - Dataform (SQL dependencies/Git)
+15. **B** - BigQuery Reservations (Noisy Neighbor)
+16. **B** - Cloud Data Fusion (Visual ETL/Lineage)
+17. **C** - BigQuery Data Clean Rooms (Privacy)
+18. **C** - Avro for high-scale ingestion
+19. **B** - BigQuery BI Engine (Dashboard speed)
+20. **B** - BigLake (Security for GCS files)
 
 ---
 
@@ -452,6 +644,11 @@ D. Use BigQuery (supports JSON natively)
 1. **Cloud SQL**: Understand TCO, when NOT to use VMs, connectivity patterns.
 2. **Spanner**: Regional vs Multi-Region cost trade-offs, hotspotting, TrueTime/Paxos basics.
 3. **Bigtable**: Row key design is 80% of the exam questions, know when it's overkill.
-4. **BigQuery**: Partitioning/clustering for cost, understand OLAP vs OLTP.
+4. **BigQuery**:
+   - **Performance**: Partitioning/clustering, BI Engine.
+   - **Cost**: Partitioning, Slot Reservations vs On-demand.
+   - **Governance**: Dataform (modeling), BigLake (security), Analytics Hub.
 5. **CAP Theorem**: Memorize the CP/AP choices for each database.
 6. **Migration**: DMS (homogeneous), Datastream (heterogeneous), partner solutions (MongoDB).
+7. **Memorystore**: Standalone Redis (300GB) vs Cluster (5TB). 
+8. **ETL Tools**: Dataflow (Developer/Scale) vs Data Fusion (Business/Visual).

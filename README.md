@@ -117,3 +117,5 @@ black src/ tests/
 - [Google Cloud Python Client Libraries](https://cloud.google.com/python/docs/reference)
 - [Google Cloud Documentation](https://cloud.google.com/docs)
 - [Python Best Practices](https://google.github.io/styleguide/pyguide.html)
+
+# Notes

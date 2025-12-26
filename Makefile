@@ -1,4 +1,4 @@
-.PHONY: help setup install test lint format clean run
+.PHONY: help setup install test lint format clean run updategit
 
 help:
 	@echo "Available commands:"
@@ -9,6 +9,7 @@ help:
 	@echo "  make format   - Format code with black"
 	@echo "  make clean    - Clean up temporary files"
 	@echo "  make run      - Run a specific experiment (usage: make run FILE=storage_example.py)"
+	@echo "  make updategit m='msg' - Add, commit, and push changes (default m='more updates')"
 
 setup:
 	@bash scripts/setup.sh
@@ -48,3 +49,14 @@ run:
 		exit 1; \
 	fi
 	python src/experiments/$(FILE)
+
+m ?= more updates
+
+updategit:
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		git add .; \
+		git commit -m "$(m)"; \
+		git push origin main; \
+	else \
+		echo "Nothing to commit, working tree clean"; \
+	fi

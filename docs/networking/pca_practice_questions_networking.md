@@ -415,3 +415,53 @@ D. Public IP on the VM
    - VPC Service Controls = Data exfiltration prevention.
 6. **Shared VPC**: Host project (network team) + service projects (app teams).
 7. **Private Google Access**: VMs without public IPs can reach Google services.
+
+---
+
+## Question 1: Global Load Balancing with CDN
+**Scenario:** A retail company wants a global e-commerce site with low latency for users worldwide, blue-green or canary releases, and centralized SSL/TLS management.
+
+**Options:**
+*   A. Regional HTTP(S) Load Balancers in each region
+*   B. Global external HTTP(S) Load Balancer with Cloud CDN and backend services in multiple regions
+*   C. Cloud DNS round-robin to regional instance groups
+*   D. Internal HTTP(S) Load Balancers plus Cloud VPN
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Global external HTTP(S) Load Balancer:** Provides anycast IP, cross-region load balancing, SSL offload, fine-grained traffic control (for canary/blue-green), and integrates with Cloud CDN for lower latency globally.
+
+**Why others are wrong:**
+*   **A:** Regional load balancers lack global anycast intelligence and coordinated traffic control.
+*   **C:** DNS round-robin lacks health checking and fine-grained release control.
+*   **D:** Internal load balancers are for internal traffic only.
+</details>
+
+---
+
+## Question 2: Hybrid Connectivity Private Access
+**Scenario:** A retailer has on-premises services exposed internally over private IPs. New Google Cloud microservices must call those on-prem services over private IP, avoid exposing services to the internet, and use managed, scalable Google Cloud networking.
+
+**Options:**
+*   A. Cloud VPN or Cloud Interconnect plus Private Service Connect to reach on-prem services over private IPs
+*   B. External HTTP(S) Load Balancer with a public IP; restrict access using firewall rules
+*   C. Cloud NAT for all VPC subnets and direct calls to on-prem via public IP
+*   D. Expose on-prem services via a public API Gateway using mutual TLS
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: A**
+
+**Why:**
+*   **Cloud VPN or Cloud Interconnect:** Provides hybrid connectivity between the on-prem network and the VPC over private links.
+*   **Private Service Connect:** Allows Google Cloud clients to consume on-prem or partner services via private IPs without exposing them publicly.
+
+**Why others are wrong:**
+*   **B & C:** Rely on public endpoints, which conflicts with the requirement to avoid direct internet exposure.
+*   **D:** Still exposes services publicly and adds complexity.
+</details>

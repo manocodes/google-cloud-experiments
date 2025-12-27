@@ -361,3 +361,54 @@ D. STS rolls back the partial transfer
    - < 20 TB + good internet → gsutil/STS
    - > 20 TB or bad internet → Transfer Appliance
 6. **Signed URLs**: Time-limited access without IAM changes.
+
+---
+
+## Question 1: Cloud Storage Lifecycle vs Autoclass
+**Scenario:** A compliance team needs to store logs in Cloud Storage for at least 18 months. After 60 days, cost should be minimized by moving logs to a colder storage class. After 18 months, logs should be deleted automatically.
+
+**Options:**
+*   A. Enable Autoclass on the log bucket and set an 18-month bucket retention policy
+*   B. Lifecycle rules to move objects to Coldline at 60 days and delete them after 18 months
+*   C. Lifecycle rules to move objects to Nearline at 90 days and Coldline at 180 days, and set a 7-year retention policy
+*   D. A retention policy of 60 days, then manually delete objects older than 18 months
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Lifecycle rules:** Can implement explicit age-based transitions to a specific class (Coldline at 60 days) and deletion after 18 months, directly matching the requirement.
+
+**Why others are wrong:**
+*   **A:** Autoclass optimizes storage automatically but does not implement precise "exactly at 60 days" transitions or "delete after 18 months" rules by itself.
+*   **C:** Uses different timings and introduces unnecessary Nearline storage.
+*   **D:** Relies on manual deletion and a too-short retention policy, increasing operational risk.
+</details>
+
+---
+
+## Question 2: Data Residency Compliance
+**Scenario:** A financial services firm needs to comply with strict data residency: EU customer data must remain in the EU. They have global users but only EU-based storage and processing for EU customers' personal data.
+
+**Options:**
+*   A. Multi-region storage in `eu` and global load balancing with EU backend services
+*   B. Multi-region storage in `us` and use CMEK
+*   C. Global BigQuery dataset in `US` with row-level security
+*   D. Any region is acceptable if CMEK is enabled
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: A**
+
+**Why:**
+*   **EU multi-region locations:** For storage/BigQuery satisfies data residency requirements.
+*   **EU backend services:** Ensures processing stays in the EU while still serving global traffic via a global load balancer.
+
+**Why others are wrong:**
+*   **B:** US locations violate EU-only residency requirements; CMEK doesn't override data location.
+*   **C:** US location violates residency.
+*   **D:** CMEK provides encryption key control but doesn't enforce data location.
+</details>

@@ -355,3 +355,153 @@ D. Store sessions in Cloud Storage
 3. **Cloud Run**: When to use vs Functions (HTTP vs events).
 4. **App Engine**: Standard vs Flexible (scale to zero is the key differentiator).
 5. **12-Factor App**: Factor VI (Stateless) comes up repeatedly in compute questions.
+
+---
+
+## Question 9: Modernizing Legacy Workload
+**Scenario:** A media company wants to migrate its on-premises monolithic video processing application to Google Cloud. They need to scale horizontally during peak events, minimize operational overhead, and keep some legacy dependencies that require root access.
+
+**Options:**
+*   A. Migrate to GKE Autopilot with a single large node pool
+*   B. Lift and shift to Compute Engine managed instance groups with instance templates
+*   C. Containerize and run on Cloud Run jobs for processing
+*   D. Use App Engine standard environment with traffic splitting
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: C**
+
+**Why:**
+*   **Cloud Run jobs:** Provide horizontal auto-scaling, minimal operational overhead, and can run containerized workloads with custom runtimes and dependencies, making them perfect for batch/video processing patterns.
+
+**Why others are wrong:**
+*   **A:** While GKE Autopilot reduces ops overhead, it still adds Kubernetes complexity for what is essentially a batch processing workload.
+*   **B:** Lift and shift to Compute Engine maintains more operational overhead (patching, managing instances, configuring autoscaling).
+*   **D:** App Engine standard is constrained by runtime limitations and doesn't support root access or legacy dependencies.
+</details>
+
+---
+
+## Question 10: GKE Latency Optimization
+**Scenario:** Your application runs on GKE. Users report increased latency during traffic spikes. You see CPU at 40% but high p95 latency during these spikes.
+
+**Options:**
+*   A. Increase node size only
+*   B. Configure HPA (Horizontal Pod Autoscaler) based on custom latency metrics and ensure cluster autoscaler is enabled
+*   C. Switch to preemptible nodes
+*   D. Migrate to App Engine standard
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **HPA with custom metrics:** Allows scaling based on actual latency metrics (not just CPU), ensuring the cluster scales pods and nodes during real user impact. Combined with cluster autoscaler, this addresses latency under load effectively.
+
+**Why others are wrong:**
+*   **A:** Simply increasing node size doesn't address pod-level scaling or the actual latency bottleneck.
+*   **C:** Preemptible nodes reduce cost but can introduce instability and don't solve the latency problem.
+*   **D:** Migrating platforms is a massive undertaking and doesn't address the root cause of scaling misconfiguration.
+</details>
+
+---
+
+## Question 11: Compute Right-Sizing
+**Scenario:** A batch processing system runs approximately 8 hours nightly on Compute Engine. Resource utilization graphs show CPU at ~20% and memory at ~30% consistently.
+
+**Options:**
+*   A. Use smaller machine types or fewer vCPUs for the batch workload
+*   B. Switch to committed use discounts on current machine types
+*   C. Enable autoscaling on the managed instance group with the same machine type
+*   D. Move to larger machines to finish the job faster
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: A**
+
+**Why:**
+*   **Right-sizing:** Over-provisioned machines with low utilization should be downsized to smaller machine types or fewer vCPUs to lower cost without impacting performance.
+
+**Why others are wrong:**
+*   **B:** Committed use discounts save money but don't address the fundamental issue of over-provisioning (paying for unused capacity).
+*   **C:** Autoscaling helps with variable workloads but doesn't fix the core problem of using oversized machines.
+*   **D:** Larger machines would be even more wasteful and expensive.
+</details>
+
+---
+
+## Question 12: Cloud Run Deployment Strategy
+**Scenario:** A microservices application on Cloud Run must roll out new versions with minimal risk and quick rollback capability.
+
+**Options:**
+*   A. All-at-once deployments with no prior testing
+*   B. Canary releases using Cloud Run traffic splitting to send a small percentage to the new revision, then gradually increase
+*   C. Blue-green by replacing the existing service and deleting the old revision
+*   D. Manual scaling to zero before each deploy
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Canary releases with traffic splitting:** Cloud Run natively supports splitting traffic across revisions, enabling progressive rollout (e.g., 5% → 25% → 50% → 100%) with easy rollback if issues are detected.
+
+**Why others are wrong:**
+*   **A:** All-at-once deployments carry maximum risk with no gradual validation.
+*   **C:** Blue-green deployments work but are less directly supported than traffic splitting in Cloud Run; deleting the old revision immediately prevents easy rollback.
+*   **D:** Scaling to zero doesn't provide a deployment strategy and causes downtime.
+</details>
+
+---
+
+## Question 13: Multi-Region GKE Resilience
+**Scenario:** A critical backend currently runs in a single GKE regional cluster. You want to increase resilience to regional failures while keeping management overhead reasonable.
+
+**Options:**
+*   A. Add more node pools in the same region
+*   B. Create a second GKE regional cluster in another region and place both behind a global external HTTP(S) Load Balancer
+*   C. Convert the cluster to Autopilot
+*   D. Put a Cloud CDN in front of the existing cluster
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Multi-region clusters with global load balancing:** Running regional clusters in different regions behind a global load balancer improves availability against regional failures and aligns with multi-region reliability patterns.
+
+**Why others are wrong:**
+*   **A:** Adding more node pools in the same region doesn't protect against regional outages.
+*   **C:** Converting to Autopilot reduces ops overhead but doesn't address regional failure resilience.
+*   **D:** CDN helps with cacheable content performance but doesn't provide regional redundancy for the backend.
+</details>
+
+---
+
+## Question 14: Batch Job Modernization
+**Scenario:** A startup wants to modernize a legacy reporting batch job that runs nightly and takes 2 hours. They want to pay only when jobs run, have easy scheduling, and automatic retries with alerting.
+
+**Options:**
+*   A. Cloud Functions triggered by Pub/Sub
+*   B. Cloud Run jobs triggered by Cloud Scheduler via Pub/Sub
+*   C. Compute Engine instances with cron
+*   D. App Engine cron with manual jobs
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Cloud Run jobs + Cloud Scheduler:** Provides containerized batch execution with pay-per-use pricing, time-based triggers via Cloud Scheduler, automatic retries, and integration with Cloud Monitoring for alerting.
+
+**Why others are wrong:**
+*   **A:** Cloud Functions have execution time limits (9 minutes for 1st gen, 60 minutes max for 2nd gen), potentially too short for a 2-hour job.
+*   **C:** Compute Engine with cron requires managing VMs and doesn't provide pay-per-use or built-in retry/alerting.
+*   **D:** App Engine cron works but has more overhead than Cloud Run jobs for simple batch processing.
+</details>

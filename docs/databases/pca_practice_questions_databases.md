@@ -501,3 +501,81 @@ This document contains exam-style questions focused on Google Cloud databases, d
 *   **A:** Omni is for multi-cloud (AWS/Azure).
 *   **C:** DLP finds sensitive text, doesn't enforce row-level access control.
 </details>
+
+---
+
+## Question 21: HIPAA BigQuery Access Control
+**Scenario:** A healthcare provider must meet HIPAA requirements. They need fine-grained access to PHI datasets in BigQuery, ability to audit who accessed what, and protection against accidental public exposure.
+
+**Options:**
+*   A. BigQuery IAM at project level with only BigQuery Admin
+*   B. BigQuery dataset-level IAM with Viewer, User, and custom roles plus Cloud Audit Logs for Data Access and org policies blocking public access
+*   C. Rely on authorized views only
+*   D. Export data to Cloud Storage and manage access via ACLs
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Dataset-level IAM with least-privilege roles:** Provides fine-grained access control.
+*   **Cloud Audit Logs for Data Access:** Audits all data access operations.
+*   **Organization policies:** Block public access, preventing accidental exposure.
+
+**Why others are wrong:**
+*   **A:** Project-level access with Admin role is far too broad and violates least privilege.
+*   **C:** Authorized views are useful but not sufficient alone for complete access control and auditing.
+*   **D:** Cloud Storage ACLs are less granular and BigQuery data queried via GCS doesn't provide the same audit trail.
+</details>
+
+---
+
+## Question 22: BigQuery Streaming Optimization
+**Scenario:** A streaming analytics pipeline uses Pub/Sub → Dataflow → BigQuery. BigQuery costs have risen sharply. You see many small streaming inserts.
+
+**Options:**
+*   A. Replace Dataflow with Cloud Functions
+*   B. Use BigQuery Storage Write API with Dataflow and batch inserts, plus partitioned tables
+*   C. Export Pub/Sub to Cloud Storage and load once per day
+*   D. Disable streaming and rely on manual CSV uploads
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **BigQuery Storage Write API with batching:** Improves streaming efficiency and reduces costs compared to many small inserts.
+*   **Partitioned tables:** Reduce storage and query costs by limiting data scanned.
+
+**Why others are wrong:**
+*   **A:** Cloud Functions don't address the BigQuery cost structure issue.
+*   **C:** Daily batch loads may violate near real-time analytics requirements.
+*   **D:** Manual uploads don't scale and lose real-time capabilities.
+</details>
+
+---
+
+## Question 23: Database RTO/RPO
+**Scenario:** A global SaaS app must have an RTO of 15 minutes and RPO of near-zero for its primary transactional database.
+
+**Options:**
+*   A. Single-region Cloud SQL with daily backups
+*   B. Cloud SQL with cross-region read replica and planned failover automation
+*   C. Bigtable single-cluster instance
+*   D. Export database nightly to Cloud Storage
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Cross-region replicas with automated failover:** Offers low RPO (async replication lag typically < 1 minute) and RTO within minutes for regional outages, fitting the stated objectives.
+
+**Why others are wrong:**
+*   **A:** Single-region with daily backups has RPO of 24 hours and RTO of hours (restore time).
+*   **C:** Bigtable single cluster doesn't provide cross-region redundancy.
+*   **D:** Nightly exports have RPO of 24 hours.
+</details>

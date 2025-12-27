@@ -80,3 +80,29 @@ You don't need to be a lawyer, but know which architectures fit which compliance
 *   **HIPAA (Health):** Requires BAA (Business Associate Agreement). Most GCP services are HIPAA compliant *if configured correctly* (Encryption, Access Control).
 *   **GDPR (Europe Privacy):** Data Residency. Use **Regional** resources (e.g., `europe-west1`) instead of Global/Multi-region if residence is mandated.
 *   **SOX (Financial):** Heavy emphasis on Audit Logs and separation of duties.
+
+---
+
+## 5. Advanced Compliance Features
+
+### Access Approval (Transparency)
+*   **Problem:** Occasionally, Google Support Engineers need to look at your detailed configuration or data to fix a support ticket.
+*   **Solution:** Access Approval requires them to request **explicit approval** (via email/Time-based) from YOU before they can touch anything.
+*   **Exam Trigger:** "Regulatory requirement that the cloud provider must not access data without customer consent."
+
+### Binary Authorization (Supply Chain Security)
+*   **Context:** GKE / Cloud Run.
+*   **Function:** Ensures only **Trusted Container Images** are deployed.
+*   **Mechanism:**
+    1.  CI/CD pipeline builds image -> Vulnerability Scan passes -> "Attestor" signs the image.
+    2.  GKE tries to pull image.
+    3.  Binary Auth checks signature. If missing -> **BLOCK**.
+*   **Exam Trigger:** "Prevent untrusted/unscanned code from running in production."
+
+### Shielded VMs (Integrity)
+*   **Function:** Verifies the integrity of the boot sequence (Firmware -> Bootloader -> Kernel).
+*   **Components:**
+    *   **Secure Boot:** Signs the kernel.
+    *   **vTPM:** Virtual Trusted Platform Module (stores secrets/keys).
+    *   **Integrity Monitoring:** Alerts if the boot baseline changes (Rootkit detection).
+*   **Exam Trigger:** "Ensure host has not been compromised by a rootkit/boot-virus."

@@ -102,5 +102,22 @@ While a networking tool, it's a security best practice.
 ## 6. Web Security Scanner
 
 *   **Function:** Crawls your *public* App Engine, GKE, or Compute Engine web apps.
-*   **Detects:** Outdated libraries, Cross-site scripting (XSS), Flash injection, Mixed content (HTTP in HTTPS).
-*   **Exam Relevance:** Automated vulnerability scanning for web apps.
+---
+
+## 7. Packet Mirroring (Traffic Forensics)
+
+*   **Function:** Clones all traffic (Ingress/Egress) from a VM and sends it to a specialized "Collector" (usually a third-party IDS/IPS like Palo Alto or Fortinet) via an Internal Load Balancer.
+*   **Use Case:** "Security team needs to inspect payload contents for malware signature" or "Regulatory requirement to capture full packet capture for forensics."
+*   **Differs from Flow Logs:** Flow Logs only show *metadata* (Who talked to Who, Port, Bytes). Packet Mirroring shows the *actual payload*.
+
+---
+
+## 8. OS Login (Managing SSH via IAM)
+
+*   **Old Way:** Managing SSH keys in metadata (brittle, hard to revoke).
+*   **OS Login Way:** links the Linux user account to the Google Identity.
+*   **Advantages:**
+    *   Use IAM Roles (`compute.osLogin`) to grant SSH access.
+    *   If you remove the user from IAM, their SSH access is revoked *immediately*.
+    *   Integrates with 2FA.
+    *   **Exam Scenario:** "You need to manage SSH access for a large team of developers and ensure access is revoked instantly when they leave." -> **Use OS Login.**

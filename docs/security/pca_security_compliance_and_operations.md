@@ -12,8 +12,13 @@ SCC is the centralized dashboard for security and risk management. It gives you 
     *   **Web Security Scanner (Custom Scan):** Limited.
 2.  **Premium Tier (Paid):**
     *   **Event Threat Detection:** Uses logs to find threats (e.g., "Brute force SSH", "Cryptomining detected").
+        > **Definition: Brute Force SSH:** An attacker uses a bot to try thousands of passwords per second (e.g., `admin/1234`, `root/password`) against your VM's Port 22 hoping to guess the login.
     *   **Container Threat Detection:** Detects attacks inside GKE.
     *   **Compliance Monitoring:** Checks against PCI, CIS Benchmarks, NIST.
+        > *   **PCI (Payment Card Industry):** Standard for handling credit cards.
+        > *   **CIS (Center for Internet Security):** Best-practice technical checklists (e.g., "Don't use port 80").
+        > *   **NIST (National Institute of Standards and Technology):** US Gov security framework (very rigorous).
+        > *   **ISO 27001:** International standard for Information Security Management.
 
 ### Key Capabilities
 *   **Asset Discovery:** Automatically inventories all assets across the Org.
@@ -62,6 +67,7 @@ Google Cloud automatically generates audit logs for activities.
     *   **What:** Records when a user was blocked by VPC Service Controls or other policies.
 
 ### Best Practice: Log Sinks
+> **Definition: Log Sink (Router):** A rule that says "If a log matches X, send a copy to Y." It allows you to export logs out of the temporary Logging buffer into long-term storage (BigQuery/GCS/PubSub).
 *   **Aggregated Sinks:** Use specific "Log Router Sinks" to export logs from all projects to a centralized BigQuery dataset or Storage Bucket for long-term retention + compliance analysis.
 *   **Immutability:** Use "Bucket Lock" (Retention Policy) on the log bucket to ensure logs cannot be deleted for X years (WORM compliance).
 

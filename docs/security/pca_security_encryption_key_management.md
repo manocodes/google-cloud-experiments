@@ -4,7 +4,7 @@ This guide covers critical encryption concepts for the Professional Cloud Archit
 
 ## 1. Encryption Basics
 
-By default, **Google Cloud encrypts all data at rest** (using AES-256) and **in transit** (using TLS). You do not need to configure anything for this standard protection.
+By default, **Google Cloud encrypts all data at rest** (using AES-256: **Advanced Encryption Standard**) and **in transit** (using TLS: **Transport Layer Security**). You do not need to configure anything for this standard protection.
 
 *   **Encryption at Rest:** Data is broken into chunks; each chunk is encrypted with a specific data key; data keys are wrapped by a master key (KEK).
 *   **Encryption in Transit:** Data traveling between Google and the user (internet) or between Google data centers.

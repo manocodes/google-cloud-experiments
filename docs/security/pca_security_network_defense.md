@@ -5,6 +5,7 @@ This guide covers network security perimeters, DDoS protection, and the BeyondCo
 ## 1. VPC Service Controls (VPC-SC) (CRITICAL TOPIC)
 
 VPC Service Controls is one of the most frequently asked topics. It prevents **Data Exfiltration**.
+> **Data Exfiltration Definition:** The unauthorized transfer of data from a secure corporate system to an untrusted external location (e.g., copying a corporate database to a personal Google Drive).
 
 ### The Problem it Solves
 "How do I prevent a user with valid credentials from copying data from my corporate BigQuery bucket to their personal Gmail bucket?" (IAM cannot stop this, as the user has permission to read the source).
@@ -32,7 +33,22 @@ Cloud Armor is Google's **Web Application Firewall (WAF)** and DDoS protection s
 1.  **DDoS Protection:** Protects against Volumetric attacks (L3/L4) and Protocol attacks.
     *   *Standard:* Free, basic protection.
     *   *Managed Protection Plus:* Paid, covers L7 attacks, access to DDoS response team.
+
+    > **Quick Ref: OSI Layers**
+    > *   **L1 (Physical):** Cables/Fiber.
+    > *   **L2 (Data Link):** MAC Addresses/Switches.
+    > *   **L3 (Network):** IP Addresses/Routers (Volumetric Attacks hit here).
+    > *   **L4 (Transport):** TCP/UDP Ports.
+    > *   **L5 (Session):** Syn/Ack.
+    > *   **L6 (Presentation):** Encryption/Encoding.
+    > *   **L7 (Application):** HTTP/HTTPS Requests (SQLi, XSS, Scrapers hit here).
+
 2.  **WAF Rules:** Protects against OWASP Top 10 (SQL Injection, XSS, etc.).
+    > **OWASP:** (Open Web Application Security Project). A global nonprofit that publishes the "Top 10" list of the most dangerous web vulnerabilities (e.g., SQL Injection, Broken Auth). Cloud Armor's rules are tuned to block these specifically.
+        > *   **Deep Dive: Cross-Site Scripting (XSS):**
+        >     *   **How it works:** A hacker types a script (e.g., `<script>steal_cookies()</script>`) into a public comment box.
+        >     *   **The Problem:** When *other* users view that comment, the script runs in *their* browser. It steals their Session Cookies.
+        >     *   **Result:** The hacker hijacks the user's session.
     *   Pre-configured rules available.
 3.  **Geo-Blocking:** "Block traffic from Country X."
 4.  **Rate Limiting:** "Allow max 100 requests per minute from a single IP."

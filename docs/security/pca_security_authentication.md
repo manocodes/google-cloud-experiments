@@ -10,11 +10,16 @@ Before we talk about code, we must understand how **Users** get into Google Clou
 Cloud Identity is the **IDaaS** (Identity as a Service) layer. It replaces the "Consumer Gmail" model with an Enterprise directory.
 *   **Google Cloud Directory Sync (GCDS):**
     *   **Function:** Syncs users/groups from your on-prem Active Directory (LDAP) to Cloud Identity.
+    *   *Note on LDAP:* **Lightweight Directory Access Protocol**. It is the industry-standard "language" used to speak to directory servers like Active Directory. If the exam mentions "LDAP compliant server," read it as "Active Directory or similar on-prem user database."
     *   **Direction:** **One-Way** (AD -> Google). It *never* writes back to AD.
     *   **Mechanism:** Runs as a scheduled task on a server in your network.
 *   **Single Sign-On (SSO):**
     *   You delegate authentication to an external IdP (Identity Provider) like Azure AD (Entra ID), Okta, or Ping.
     *   User types email -> Redirected to Okta -> Logs in -> Redirected back with SAML Token.
+
+    > **Confusion Alert: Google as an SSO Provider?**
+    > *   **Inbound SSO:** (Discussed above). External IdP (Okta) -> Log into GCP. Google is NOT the SSO provider here; it is the *Service Provider* (SP).
+    > *   **Outbound SSO:** You can also use Cloud Identity to let your users log into *other* apps (like Salesforce, Slack, Zoom). In this case, **Google IS the IdP**.
 
 ### Best Practices (Exam):
 *   **Super Admins:** Should *not* use SSO. Keep them purely in Cloud Identity for recovery (in case SSO breaks). Enforce strong 2SV (Hardware Keys/Titan Keys) on them.

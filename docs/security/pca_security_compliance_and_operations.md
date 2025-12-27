@@ -40,9 +40,34 @@ Cloud DLP is a fully managed service designed to discover, classify, and protect
     *   **Replacement:** `[CREDIT_CARD]`
     *   **Tokenization (Format Preserving Encryption):** Replaces sensitive data with a token that preserves the format/length but hides real data. *Reversible* if you have the key.
 
-### Exam Scenarios
-*   "You need to upload logs to BigQuery but they contain PII (Email addresses). The analytics team needs to query the logs but shouldn't see expenses." -> **Use DLP API to redact/mask PII before ingestion.**
-*   "You need to scan an existing storage bucket for credit card numbers." -> **Create a DLP Inspection Job.**
+### 3. DLP Advanced Use Cases & Automation (Exam Critical)
+
+DLP is not just about "scanning." The exam tests how you integrate it into a real-time pipeline.
+
+**A. Automating De-identification (Ingestion Pipeline)**
+*   **Scenario:** You receive files containing PII (names, emails) but your analytics team must NOT see PII.
+*   **Solution:** Use **Pub/Sub** + **Cloud Functions** + **DLP API**.
+    1.  File lands in `Ingest-Bucket`.
+    2.  `ObjectFinalize` event triggers **Cloud Function**.
+    3.  Function calls **DLP API** to mask/tokenize PII.
+    4.  Clean data is written to `Clean-Bucket` (or BigQuery).
+
+**B. Separation of Duties (Re-Identification)**
+*   **Scenario:** Data is tokenized (e.g., Credit Card `1234` -> `Token_XYZ`). The Analytics team sees `Token_XYZ`. Occasionally, a "Fraud Analyst" needs to see the real number.
+*   **Solution:**
+    *   **Tokens:** Use "Format Preserving Encryption" with a specific key.
+    *   **Access:** Only the Fraud Analyst has the **KMS Key** to *decrypt* (re-identify) the token. The Analytics team does not.
+
+**C. Notification & Alerting**
+*   **Scenario:** You need to be alerted *immediately* if a developer uploads a file with >100 Credit Card numbers to a public bucket.
+*   **Solution:**
+    1.  Create a **DLP Job Trigger**.
+    2.  Configure "Actions" -> **Publish to Pub/Sub**.
+    3.  Connect Pub/Sub to **Cloud Functions** (to quarantine the file) or **Email/Slack** (to alert Security Team).
+
+**D. Real-time (Content API) vs. Storage (Storage API)**
+*   **Content API:** For streaming data or "on the fly" masking (e.g., user types into a chat window -> mask before saving).
+*   **Storage API:** For scanning *static* data already sitting in BigQuery, GCS, or Datastore (batch jobs).
 
 ---
 

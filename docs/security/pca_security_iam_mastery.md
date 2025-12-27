@@ -2,8 +2,20 @@
 
 Identity and Access Management (IAM) is the backbone of Google Cloud security. This guide covers the *Authorization* aspect (Permission logic), complementing the *Authentication* (ADC) guide.
 
-## 1. The Resource Hierarchy & Policy Inheritance
+## 1. The IAM Equation (Mental Model)
+For every exam question, break the IAM requirement into this sentence:
+**"WHO gets to do WHAT on WHICH RESOURCE and HOW."**
 
+| Component | IAM Term | Examples | Exam Rule |
+| :--- | :--- | :--- | :--- |
+| **WHO** | **Principal** | User, Group, Service Account. | Always assign to **Groups**, not Users. Use **Service Accounts** for apps. |
+| **WHAT** | **Role** | Collection of Permissions. | Prefer **Predefined**. Use **Custom** for Least Privilege. Avoid **Basic**. |
+| **WHERE** | **Resource** | Org, Folder, Project, Bucket. | Policies inherit downwards. Child cannot block Parent allow. |
+| **HOW** | **Condition** | Context (Time, IP, Device). | Use **IAM Conditions** for "Only between 9-5" or "Only on specific resource names". |
+
+---
+
+## 2. The Resource Hierarchy & Policy Inheritance
 Policies are attached to resources. The hierarchy flows:
 **Organization** -> **Folders** -> **Projects** -> **Resources** (Buckets, VMs).
 
@@ -17,14 +29,11 @@ Policies are attached to resources. The hierarchy flows:
     *   *Exam Trap:* "How do I restrict a specific user in a sub-project?" -> You **CANNOT** override a parent Allow policy. You must remove the parent policy and re-apply narrower permissions at lower levels.
 
 ### Deep Dive: Deny Policies (IAM Deny)
-*   Google recently introduced **Deny Policies**.
 *   **Logic:** `DENY` overrides `ALLOW`.
 *   **Use Case:** "Ensure NO ONE, not even Org Admins, can delete this specific compliance log bucket."
-*   **Exam Relevance:** Be careful. Standard IAM is additive. "IAM Deny" is a specific advanced feature for guardrails.
 
----
 
-## 2. Roles: The Three Types
+## 3. Roles (The WHAT): The Three Types
 
 | Role Type | Description | Pros | Cons |
 | :--- | :--- | :--- | :--- |
@@ -34,9 +43,17 @@ Policies are attached to resources. The hierarchy flows:
 
 *   *Exam Tip:* Always prefer **Predefined Roles** for operational ease unless strictly required to use **Custom Roles** for compliance/least privilege. **Never** use Basic roles in production.
 
+### Detailed Principal Selection (The WHO)
+| Scenario | Correct Identity |
+| :--- | :--- |
+| "Manage access for 50 employees in the HR department." | **Google Group** (e.g., `hr-team@company.com`). Never add 50 users individually. |
+| "An application on a VM needs to access a bucket." | **Service Account** (Attached to the VM). |
+| "A contractor needs temporary access." | **Cloud Identity** account (if they don't have G-Suite) + **Time-based Condition**. |
+| "You need to access GCP from an on-premise server." | **Service Account Key** (Least preferred) or **Workload Identity Federation** (Preferred). |
+
 ---
 
-## 3. IAM Conditions (Conditional Access)
+## 4. IAM Conditions (The HOW)
 
 You can add a "Condition" to a Role Binding. The role is only active if the condition is TRUE.
 
@@ -54,7 +71,7 @@ You can add a "Condition" to a Role Binding. The role is only active if the cond
 
 ---
 
-## 4. Service Account Best Practices
+## 5. Service Account Best Practices
 
 Service Accounts (SAs) are identities for resources.
 
@@ -66,7 +83,7 @@ Service Accounts (SAs) are identities for resources.
 
 ---
 
-## 5. Organizational Policies (Guardrails)
+## 6. Organizational Policies (Guardrails)
 
 Do not confuse IAM (Who can do what) with Org Policies (What can be done).
 
@@ -81,7 +98,7 @@ Do not confuse IAM (Who can do what) with Org Policies (What can be done).
 
 ---
 
-## 6. Exam Scenarios Recap
+## 7. Exam Scenarios Recap
 
 | Scenario | Solution |
 | :--- | :--- |

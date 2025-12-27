@@ -213,3 +213,157 @@ D. Use Cloud NAT instead.
 *   **C:** Granting the role lets the user *change* the policy, but doesn't technically *fix* the issue until they perform step B. Also, granting "Org Policy Admin" is dangerous/too broad.
 *   **D:** Cloud NAT is for *Outbound* traffic. A website needs *Inbound* traffic, so NAT won't work for serving a site.
 </details>
+
+---
+
+## Question 9: Active Threat Detection
+**Scenario:** Your CISO requires immediate visibility into any "active threats" occurring within your environment, specifically **Cryptomining** binaries running on VMs and **Brute Force SSH** attacks. You also need to generate a one-click compliance report for **PCI-DSS**. You want to minimize configuration overhead.
+
+**Options:**
+A. Enable Security Command Center (SCC) Standard Tier.
+B. Enable Security Command Center (SCC) Premium Tier.
+C. Install the Cloud Logging Agent on all VMs and create a Log-Based Metric for SSH failures.
+D. Use Packet Mirroring to send all traffic to a third-party Intrusion Detection System (IDS).
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Active Threats:** Detecting *runtime* threats like Cryptomining and Brute Force attacks (via Event Threat Detection) is a **Premium Tier** feature.
+*   **Compliance Reports:** One-click compliance reports (PCI, NIST, ISO) are exclusive to **Premium Tier**.
+
+**Why others are wrong:**
+*   **A:** Standard Tier only detects **static misconfigurations** (e.g., Public Bucket, Open Firewall), not active attacks.
+*   **C:** While you *could* build custom metrics for SSH, it doesn't detect Cryptomining or offer PCI reports. High overhead.
+*   **D:** Third-party IDS is a valid approach but has significantly higher "configuration overhead" compared to enabling a native service toggle (SCC Premium).
+</details>
+
+---
+
+## Question 10: Secrets Management
+**Scenario:** You are deploying a microservice on Cloud Run that connects to a backend Cloud SQL database. The application needs the database password to connect. You want to follow Google's recommended security best practices for managing this credential. The password must be rotated every 90 days.
+
+**Options:**
+A. Hardcode the password in the container image and use a new image tag for rotation.
+B. Store the password in a text file in a private Cloud Storage bucket and grant the Cloud Run Service Account `storage.objectViewer`.
+C. Encrypt the password using Cloud KMS and store the ciphertext in the Code.
+D. Store the password in Secret Manager and map it to the Cloud Run container as a volume or environment variable.
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: D**
+
+**Why:**
+*   **Secret Manager:** Designed specifically for storage, rotation, and secure access of sensitive strings (API keys, passwords).
+*   **Cloud Run Integration:** Has native integration to mount secrets as volumes or Env Vars.
+*   **Rotation:** Native support for versioning and rotation.
+
+**Why others are wrong:**
+*   **A:** Hardcoding secrets is a critical security anti-pattern.
+*   **B:** Valid-ish, but poor developer experience (race conditions, no version management UI) compared to Secret Manager.
+*   **C:** KMS encrypts *data*, it doesn't store the secret itself for easy consumption. You'd still need to store the ciphertext somewhere. Secret Manager handles the encryption *and* the storage/retrieval.
+</details>
+
+---
+
+## Question 11: Data Privacy in Use
+**Scenario:** You are migrating a highly sensitive healthcare application. Regulations require that Patient Data must be encrypted at Rest, in Transit, and **DO NOT** appear in cleartext in the server's memory (RAM) while being processed, to protect against a malicious hypervisor or administrator.
+
+**Options:**
+A. Use Shielded VMs with Secure Boot enabled.
+B. Use Confidential VMs (Confidential Computing).
+C. Use Customer-Managed Encryption Keys (CMEK) for the Persistent Disks.
+D. Implement Client-Side Encryption (CSEK) before uploading data.
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Confidential VMs:** Use hardware-based memory encryption (e.g., AMD SEV) to encrypt data **in use** (in RAM). This prevents the host kernel/hypervisor from reading the memory.
+
+**Why others are wrong:**
+*   **A:** Shielded VMs protect **Integrity** (Bootloader/Rootkits), not **Privacy** of RAM.
+*   **C:** CMEK encrypts data **at Rest** (Disk), not in RAM.
+*   **D:** CSEK handles data upload security, but once the application decrypts it to process it, it would be vulnerable in RAM without Confidential VMs.
+</details>
+
+---
+
+## Question 12: Network Architecture
+**Scenario:** You have a centralized Networking team and 30 independent Application teams. The Networking team needs full control over the Subnets, Firewalls, and Cloud Routers. The Application teams need to deploy instances into these subnets but should not be able to modify network settings.
+
+**Options:**
+A. Create one VPC in the Networking Project. Use VPC Network Peering to connect it to all 30 Application Projects.
+B. Use a Shared VPC. Designate the Networking Project as the Host Project and the Application Projects as Service Projects.
+C. Create 30 separate VPCs. Use Cloud VPN to connect them all in a mesh topology.
+D. Grant the Application teams `compute.networkAdmin` role on the Networking Project.
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: B**
+
+**Why:**
+*   **Shared VPC:** The textbook pattern for "Centralized Control, Decentralized Usage." Host Project holds the network; Service Projects use it.
+
+**Why others are wrong:**
+*   **A:** Peering connects networks, but each project still owns its own VPC and firewalls. It doesn't centralize *management*.
+*   **C:** Massive management overhead (Mesh VPN for 30 projects).
+*   **D:** Violates Least Privilege. Application teams should not be Admin on the network project.
+</details>
+
+---
+
+## Question 13: Log Compliance
+**Scenario:** Your regulator requires that all Admin Activity Audit Logs be retained for 5 years for forensic purposes. The standard retention is insufficient. These logs must be effectively immutable (Write Once, Read Many).
+
+**Options:**
+A. Go to the IAM Audit Logs settings and increase the retention period to 5 years.
+B. Create an Aggregated Log Sink to export logs to a BigQuery dataset.
+C. Create an Aggregated Log Sink to export logs to a Cloud Storage bucket. Apply a Retention Policy with a Bucket Lock used.
+D. Export logs to Pub/Sub and use Dataflow to write them to a Spanner database.
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: C**
+
+**Why:**
+*   **Cloud Storage:** Best for long-term, low-cost retention (Archive class).
+*   **Bucket Lock:** The key requirement is "Immutable" (WORM). Bucket Lock prevents deletion or modification for the specified period.
+
+**Why others are wrong:**
+*   **A:** You cannot change the retention period of the built-in `_Default` bucket to 5 years arbitrarily implies simply clicking a setting; usually requires export for long-term compliance storage.
+*   **B:** BigQuery is editable (Mutable). It does not natively strictly enforce WORM like GCS Bucket Lock does, and is more expensive for simple cold storage.
+</details>
+
+---
+
+## Question 14: DLP Automation
+**Scenario:** Users upload customer support tickets (text files) to a Cloud Storage bucket. A backend process needs to index these tickets, but your legal team prohibits any Email Addresses or Credit Card numbers from being stored in the search index database. You need an automated, scalable solution.
+
+**Options:**
+A. Use a Cloud Function triggered by `google.storage.object.finalize`. Code the function to call the DLP API to inspect and redact the text, then write the clean result to the database.
+B. Use a Cloud Function triggered by `google.storage.object.finalize`. Write regex (Regular Expressions) in Python to find and replace emails and credit cards.
+C. Grant the Search Index service account the `dlp.user` role so it can ignore sensitive fields.
+D. Use Using VPC Service Controls to block uploads containing PII.
+
+<details>
+<summary>Click to reveal Answer</summary>
+
+**Correct Answer: A**
+
+**Why:**
+*   **DLP API:** The managed, enterprise-grade way to detect and redact sensitive info. It handles nuances (like Luhn check for credit cards) that simple Regex misses.
+*   **Automation:** Cloud Function trigger is the standard pattern for "On-Upload processing."
+
+**Why others are wrong:**
+*   **B:** Writing your own Regex for Credit Cards/Emails is error-prone and "reinventing the wheel" (Anti-pattern).
+*   **C:** Doesn't solve the storage requirement. The data would still land in the DB.
+*   **D:** VPC-SC blocks *traffic*, it doesn't inspect *payload content* to redact text.
+</details>
